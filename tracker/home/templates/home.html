@@ -1,0 +1,84 @@
+<!-- templates/home.html-->
+{% extends 'headers.html' %}
+{% load static %}
+
+{% block title %} Home {% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="media top-image">
+    <img src="{% static 'images/people.png' %}" class="mr-3" alt="" sizes="" srcset="">
+    <div class="media-body" style="margin-left: 20px;">
+      <h1 class="mt-6" style="margin-top:25px;"> Less Chaos </h1>
+      <h1 class="mt-6" style="margin-left:100px;"> More Outcomes </h1>
+      <h3 class="mt-2"> Project Management helps teams manage </h3>
+      <ul>
+        <li> Software Releases </li>
+        <li> Marketing Goals </li>
+        <li> Timely Deliveries </li>
+        <li> Tasks Management </li>
+        <li> Nice Reporting </li>
+      </ul>
+    </div>
+  </div>  
+
+  <div>
+    <h2> Designed with thoughtful approach for more productivity.</h2>
+    <div class="media middle-text">
+        <img class="mr-3" src="{% static 'images/powerfull.png' %}" alt="Generic placeholder image">
+        <div class="media-body">
+          <h5 class="mt-0">Unlimited Projects, Tasks & Users</h5>
+          <p>Bring all the projects & teams together on an all in one collaborative work management software.</p>
+        </div>
+      </div>
+  </div>
+
+  <div class="media">
+      <img src="{% static 'images/ideas.png' %}" class="mr-3" alt="" sizes="" srcset="">
+  </div>
+
+  <div style="margin-top: 40px;">
+      <div class="card" style="width: 18rem;">
+          <img class="card-img-top" src="{% static 'images/powerfull.png' %}" alt="Card image cap">
+          <div class="card-body">
+            <h5 class="card-title">Card title</h5>
+            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+          </div>
+        </div>
+      <div class="media">
+        <img class="mr-3" src="{% static 'images/powerfull.png' %}" alt="Generic placeholder image">
+        <div class="media-body">
+          <h5 class="mt-0">Powerfull</h5>
+          <p>Hellow World.</p>
+          <p class="mb-0">Asshole.</p>
+        </div>
+      </div>
+      <div class="media">
+          <img class="mr-3" src="{% static 'images/powerfull.png' %}" alt="Generic placeholder image">
+          <div class="media-body">
+            <h5 class="mt-0">Powerfull</h5>
+            <p>Hellow World.</p>
+            <p class="mb-0">Asshole.</p>
+          </div>
+        </div>
+        <div class="media">
+            <img class="mr-3" src="{% static 'images/powerfull.png' %}" alt="Generic placeholder image">
+            <div class="media-body">
+              <h5 class="mt-0">Powerfull</h5>
+              <p>Hellow World.</p>
+              <p class="mb-0">Asshole.</p>
+            </div>
+          </div>
+          <div class="media">
+              <img class="mr-3" src="{% static 'images/powerfull.png' %}" alt="Generic placeholder image">
+              <div class="media-body">
+                <h5 class="mt-0">Powerfull</h5>
+                <p>Hellow World.</p>
+                <p class="mb-0">Asshole.</p>
+              </div>
+            </div>
+  </div>
+
+
+</div>
+{% endblock %}

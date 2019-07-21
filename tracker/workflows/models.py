@@ -1,31 +1,33 @@
 from django.db import models
 from auth.models import User
-from auth.models import Team
+
 
 # Create your models here.
-class WorkflowStates(object):
+class WorkflowStates(models.Model):
     """ Model to create Workflow State """
     name = models.CharField(max_length=100, unique=True)
     description = models.CharField(max_length=500, null=True)
 
     created_on = models.DateTimeField(auto_now_add=True)
     modified_on = models.DateTimeField(auto_now=True)
-    created_by = models.ForeignKey(User, on_delete=models.PROTECT, related_name="Workflow state created by")
-    modified_by = models.ForeignKey(User, on_delete=models.PROTECT, related_name="Workflow state modified by")
+    created_by = models.ForeignKey(User, on_delete=models.PROTECT, related_name="workflow_state_created_by")
+    modified_by = models.ForeignKey(User, on_delete=models.PROTECT, related_name="workflow_state_modified_by")
 
-class WorkflowTransitions(object):
+
+class WorkflowTransitions(models.Model):
     """ Model to create Workflow Transition """
     name = models.CharField(max_length=100, unique=True)
     description = models.CharField(max_length=500, null=True)
-    from_state = models.ForeignKey(WorkflowStates, on_delete=models.PROTECT, related_name="Workflow Transition created by")
-    to_state = models.ForeignKey(WorkflowStates, on_delete=models.PROTECT, related_name="Workflow Transition modified by")
+    from_state = models.ForeignKey(WorkflowStates, on_delete=models.PROTECT, related_name="workflow_transition_from")
+    to_state = models.ForeignKey(WorkflowStates, on_delete=models.PROTECT, related_name="workflow_transition_to")
 
     created_on = models.DateTimeField(auto_now_add=True)
     modified_on = models.DateTimeField(auto_now=True)
-    created_by = models.ForeignKey(User, on_delete=models.PROTECT, related_name="Workflow state created by")
-    modified_by = models.ForeignKey(User, on_delete=models.PROTECT, related_name="Workflow state modified by")
+    created_by = models.ForeignKey(User, on_delete=models.PROTECT, related_name="workflow_transition_created_by")
+    modified_by = models.ForeignKey(User, on_delete=models.PROTECT, related_name="workflow_transition_modified_by")
 
-class Workflow(object):
+
+class Workflow(models.Model):
     """ Model to create Workflow """
     name = models.CharField(max_length=100, unique=True)
     description = models.CharField(max_length=500, null=True)
@@ -33,5 +35,5 @@ class Workflow(object):
 
     created_on = models.DateTimeField(auto_now_add=True)
     modified_on = models.DateTimeField(auto_now=True)
-    created_by = models.ForeignKey(User, on_delete=models.PROTECT, related_name="Workflow created by")
-    modified_by = models.ForeignKey(User, on_delete=models.PROTECT, related_name="Workflow modified by")
+    created_by = models.ForeignKey(User, on_delete=models.PROTECT, related_name="workflow_created_by")
+    modified_by = models.ForeignKey(User, on_delete=models.PROTECT, related_name="workflow_modified_by")

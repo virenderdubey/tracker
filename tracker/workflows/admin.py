@@ -1,3 +1,18 @@
 from django.contrib import admin
 
-# Register your models here.
+from workflows.models import WorkflowStates, WorkflowTransitions, Workflow
+
+@admin.register(WorkflowStates)
+class WorkflowStatesAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(WorkflowTransitions)
+class WorkflowTransitionsAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(Workflow)
+class WorkflowAdmin(admin.ModelAdmin):
+    pass
+

@@ -1,11 +1,11 @@
 from django.db import models
-from workflow.models import Workflow
-from project.models import Project
+from workflows.models import Workflow
+from projects.models import Project
 from auth.models import User
 
 
 # Create your models here.
-class TaskType(object):
+class TaskType(models.Model):
     """ Model to create Task Types """
     name = models.CharField(max_length=100, unique=True)
     description = models.CharField(max_length=500, null=True)
@@ -13,10 +13,11 @@ class TaskType(object):
 
     created_on = models.DateTimeField(auto_now_add=True)
     modified_on = models.DateTimeField(auto_now=True)
-    created_by = models.ForeignKey(User, on_delete=models.PROTECT, related_name="TaskType created by")
-    modified_by = models.ForeignKey(User, on_delete=models.PROTECT, related_name="TaskType modified by")
+    created_by = models.ForeignKey(User, on_delete=models.PROTECT, related_name="tasktype_created_by")
+    modified_by = models.ForeignKey(User, on_delete=models.PROTECT, related_name="tasktype_modified_by")
 
-class Task(object):
+
+class Task(models.Model):
     """ Create Task Model """
     TASK_PRIORITY = (
         ("P0", "P0"),
@@ -30,24 +31,35 @@ class Task(object):
     summary = models.CharField(max_length=100, blank=False, null=False, unique=False)
     description = models.TextField()
     priority = models.CharField(choices=TASK_PRIORITY, max_length=3, default="P3")
-    reporter = models.ForeignKey(User, on_delete=models.CASCADE, related_name="task created by")
-    modified_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="task modified by")
-    assignee = models.ForeignKey(User, on_delete=models.CASCADE, related_name="task assigned to")
+    reporter = models.ForeignKey(User, on_delete=models.CASCADE, related_name="task_created_by")
+    modified_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="task_modified_by")
+    assignee = models.ForeignKey(User, on_delete=models.CASCADE, related_name="task_assigned_to")
     due_date = models.DateTimeField(default=None)
     created_on = models.DateTimeField(auto_now_add=True)
     modified_on = models.DateTimeField(auto_now=True)
 
-class DependencyTasks(object):
+
+class TaskDependency(models.Model):
     """ Creating Task Dependencies """
     dependency_type = models.CharField(max_length=100, unique=False)
-    task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name="Parent Task")
-    dependent_task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name="Dependent Task")
+    task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name="parent_task")
+    dependent_task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name="dependent_task")
 
-class Attachments(object):
+
+class Attachments(models.Model):
     """ Attachments for a Task """
-    task = models.ForeignKey(Task, on_delete=models.CASCADE)
+    task = models.ForeignKey(Task, on_delete=models.CASCADE, unique=False)
     file_path = models.FileField(upload_to='attachments/')
+    created_on = models.DateTimeField(auto_now_add=True)
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="attachements_created_by")
 
-class Comments(object):
+
+class Comments(models.Model):
     """ Comments Model """
-    
+    task = models.ForeignKey(Task, on_delete=models.CASCADE, unique=False)
+    comments = models.TextField()
+
+    created_on = models.DateTimeField(auto_now_add=True)
+    modified_on = models.DateTimeField(auto_now=True)
+    created_by = models.ForeignKey(User, on_delete=models.PROTECT, related_name="comments_created_by")
+    modified_by = models.ForeignKey(User, on_delete=models.PROTECT, related_name="comments_modified_by")

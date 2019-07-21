@@ -1,13 +1,17 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block header %}
-<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-    <a class="navbar-brand" href="{% url 'home:home' %}">@ProjectManagement</a>
+<nav class="navbar navbar-expand-lg navbar-dark sticky-top bg-primary">
+    <a class="navbar-brand" href="{% url 'home:home' %}">
+      <img src="{% static 'images/header.png' %}" alt="" srcset="" width="120px">
+    </a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
+      <span class="navbar-toggler-icon"></span>
     </button>
 
     <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+    {% if user.is_authenticated %}
       <ul class="navbar-nav mr-auto">
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="http://example.com" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Projects</a>
@@ -30,6 +34,26 @@
         <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
         <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
       </form>
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+              <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+              {{ user|upper }} <span class="caret"> </span>
+            </a>
+            <div class="dropdown-menu">
+              <a href="{% url 'accounts:profile' %}">Update Profile</a>
+              <a href="{% url 'accounts:update_password' %}">Update Password</a>
+                <div class="dropdown-divider"></div>
+                <a href="{% url 'accounts:logout' %}">Logout</a>
+            </div>
+        </li>
+      </ul>
+    {% else %}
+    <div class="ml-auto">
+      <button class="btn"> SignIn </button>
+      <button class="btn"> SignUp </button>
+    </div>
+    {% endif %}
     </div>
   </nav>
-{% endblock %}
+{% endblock header %}
