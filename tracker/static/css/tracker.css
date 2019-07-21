@@ -2,9 +2,37 @@
     Primary File for DataMonster CSS
 */
 .top-image {
-    margin-top: 1px;
+    margin-top: 3px;
+}
+
+.center-image {
+    margin: 30 0 0 30; 
+}
+.middle {
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
+
+.card-center {
+    text-align: center;
+    align-items: center;
+}
+
+.card-image-width {
+    width: 70px;
+}
+.text {
+    text-align: center;
 }
 
 .middle-text {
-    margin-top: 20px;
+    margin-top: 40px;
+    width: 500px;
+    display: inline-flex;
+}
+
+.bottom {
+    margin-top: 40px;
+    margin-bottom: 40px;
+    align-items: center
 }
