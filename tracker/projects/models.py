@@ -1,5 +1,5 @@
 from django.db import models
-from auth.models import User, Team
+from accounts.models import User, Team
 
 
 class Project(models.Model):
@@ -16,7 +16,7 @@ class Project(models.Model):
     modified_by = models.ForeignKey(User, on_delete=models.PROTECT, related_name="project_modified_by")
 
 
-class Permission(models.Model):
+class Permissions(models.Model):
     name = models.CharField(max_length=100, unique=True)
     description = models.CharField(max_length=500, null=True)
 
@@ -27,7 +27,7 @@ class Permission(models.Model):
 
 class Roles(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE, limit_choices_to={"status": True})
-    permission = models.ForeignKey(Permission, on_delete=models.PROTECT)
+    permission = models.ForeignKey(Permissions, on_delete=models.PROTECT)
     team = models.ManyToManyField(Team)
 
     created_on = models.DateTimeField(auto_now_add=True)

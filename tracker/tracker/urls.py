@@ -19,8 +19,9 @@ from django.urls import include, path
 
 urlpatterns = [
     path('accounts/', include('accounts.urls', namespace='accounts')),
-    # path('accounts/', include('django.contrib.auth.urls')),
+    path('admin/projects/', include('projects.urls', namespace='projects')),
+    path('admin/workflow/', include('workflows.urls', namespace='workflows')),
+    path('admin/tasks/', include('tasks.urls', namespace='tasks')),
     path('', include('home.urls', namespace='home')),
-    path('admin/', admin.site.urls),
-    # path('', TemplateView.as_view(template_name='home.html'), name='home'),
+    path('djadmin/', admin.site.urls),
 ]

@@ -36,3 +36,25 @@
     margin-bottom: 40px;
     align-items: center
 }
+
+.signup {
+    width:60%;
+}
+h2.signup {
+    margin-top: 50px;
+    margin-bottom: 40px;
+}
+.signup-submit {
+    margin-bottom: 20px;
+    margin-left: 45%;
+}
+
+.left-pane-headings {
+    margin-top: 30px;
+    margin-bottom: 30px;
+    margin-left: 15px;
+}
+
+h5.left-pane-headings {
+    text-align: center;
+}

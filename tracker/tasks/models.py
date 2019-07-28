@@ -1,7 +1,7 @@
 from django.db import models
 from workflows.models import Workflow
 from projects.models import Project
-from auth.models import User
+from accounts.models import User
 
 
 # Create your models here.

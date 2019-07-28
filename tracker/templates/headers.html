@@ -3,14 +3,15 @@
 
 {% block header %}
 <nav class="navbar navbar-expand-lg navbar-dark sticky-top bg-primary">
+  {% block logo %}
     <a class="navbar-brand" href="{% url 'home:home' %}">
       <img src="{% static 'images/header.png' %}" alt="" srcset="" width="120px">
     </a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+  {% endblock logo %}
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsTrackerDefault" aria-controls="navbarsTrackerDefault" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarsTrackerDefault">
     {% if user.is_authenticated %}
       <ul class="navbar-nav mr-auto">
         <li class="nav-item dropdown">
@@ -30,10 +31,13 @@
             </div>
         </li>
       </ul>
-      <form class="form-inline my-2 my-lg-0">
+
+      <form class="form-inline my-4 my-lg-0">
         <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
       </form>
+
+      <a class="my-2 my-sm-0" href="{% url 'home:about' %}">About Us </a>
+
       <ul class="navbar-nav ml-auto">
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
@@ -41,17 +45,24 @@
               {{ user|upper }} <span class="caret"> </span>
             </a>
             <div class="dropdown-menu">
-              <a href="{% url 'accounts:profile' %}">Update Profile</a>
-              <a href="{% url 'accounts:update_password' %}">Update Password</a>
-                <div class="dropdown-divider"></div>
-                <a href="{% url 'accounts:logout' %}">Logout</a>
+              {% if user and user.is_superuser %}
+                <a class="dropdown-item" href="{% url 'home:admin' %}">Administration</a>
+              {% endif %}
+              <a class="dropdown-item" href="{% url 'accounts:profile' %}">Update Profile</a>
+              <a class="dropdown-item" href="{% url 'accounts:update_password' %}">Update Password</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="{% url 'accounts:logout' %}">Logout</a>
             </div>
         </li>
       </ul>
     {% else %}
     <div class="ml-auto">
-      <button class="btn"> SignIn </button>
-      <button class="btn"> SignUp </button>
+      {% block signin %}
+        <button type="button" class="btn" data-toggle="modal" data-target="#loginModal"> SignIn </button>
+      {% endblock signin %}
+      {% block signup %}
+        <a href="{% url 'accounts:signup' %}" class="btn"> SignUp </a>
+      {% endblock signup %}
     </div>
     {% endif %}
     </div>

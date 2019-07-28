@@ -4,7 +4,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin
 
 from accounts.forms import CustomUserCreationForm, CustomUserChangeForm
-from accounts.models import User, Teams
+from accounts.models import User, Team
 
 @admin.register(User)
 class CustomUserAdmin(UserAdmin):
@@ -13,6 +13,6 @@ class CustomUserAdmin(UserAdmin):
     model = User
     list_display = ['first_name', 'last_name', 'email',]
 
-@admin.register(Teams)
+@admin.register(Team)
 class TeamAdmin(admin.ModelAdmin):
     pass
