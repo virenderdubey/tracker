@@ -12,17 +12,30 @@
     {% block left_pane %}
       <ul class="nav flex-column">
         <li class="nav-item left-pane-headings">
-          <a href="{% url 'home:admin' %}">
+          <a href="{% url 'home:admin' %}"> 
             <h5 class="text-muted"> Administration </h5> 
           </a>
         </li>
-        {% for row in left_pane_items %}
-          <li class="nav-item">
-            <a class="nav-link active" href="#">  {{row.name|title}}  </a>
-          </li>
-        {% endfor %}
+        <li class="nav-item">
+          <a class="nav-link active" href="{% url 'accounts:users-list' %}"> Users </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="{% url 'accounts:teams-list' %}"> Teams </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="{% url 'projects:project-list' %}"> Projects </a>
+        </li>
+        <!-- <li class="nav-item">
+          <a class="nav-link active" href="{% url 'tasks:tasktype-list' %}"> Tasks Type </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="{% url 'projects:permissions-list' %}"> Permissions </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="{% url 'projects:roles-list' %}"> Roles </a>
+        </li> -->
       </ul>
-    {% endblock %}        
+    {% endblock left_pane %}
     </nav>
 
     <!-- Adding Right Pane -->

@@ -11,5 +11,6 @@ urlpatterns = [
         path('reset_password/', ResetPasswordView.as_view(), name='reset_password'),
         path('profile/', ResetPasswordView.as_view(), name='profile'),
         path('update_password/', ResetPasswordView.as_view(), name='update_password'),
-        path('teams/', TeamsView.as_view(), name='teams'),
+        path('teams/', TeamsView.as_view(), name='teams-list'),
+        path('users/', TeamsView.as_view(), name='users-list'),
 ]

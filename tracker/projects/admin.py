@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from projects.models import Project, Permission, Roles
+from projects.models import Project, Permissions, Roles
 
 
 @admin.register(Project)
@@ -8,8 +8,8 @@ class ProjectAdmin(admin.ModelAdmin):
     pass
 
 
-@admin.register(Permission)
-class PermissionAdmin(admin.ModelAdmin):
+@admin.register(Permissions)
+class PermissionsAdmin(admin.ModelAdmin):
     pass
 
 

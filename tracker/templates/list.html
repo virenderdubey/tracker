@@ -1,0 +1,53 @@
+{% extends 'admin.html' %}
+{% load static %}
+
+{% block customjs %}
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#list-data').DataTable({
+                "pageLength": 50,
+                "lengthMenu": [25, 50, 100, 500],
+            });
+        });
+    </script>
+{% endblock %}
+
+{% block right_pane %}
+    <!-- Adding Search Bar -->
+    <!-- Adding Tables -->
+
+    <div class="model-header">
+        <h3 class="title"> {{ model | upper }} List </h3>
+    </div>
+    <div class="ml-auto">
+        <li class="add-new"> <a class="add-new" href="{% url namespace|add:':'|add:model|lower|add:'-detail' %}"> ADD {{ model|upper }}
+            <img src="{% static 'admin/img/tooltag-add.svg' %}" alt="">
+        </li>
+    </div>
+
+    <div class="list table-responsive">
+        <table class="table table-striped table-hover" id="list-data">
+            <thead class="thead-light">
+                {% for key in keys %}
+                    <th>
+                        {{ key|upper }}
+                    </th>
+                {% endfor %}
+            </thead>
+
+            <tbody>
+                {% for obj in queryset %}
+                    <tr>
+                        {% for k, v in obj.items %}
+                            {% if k == link %}
+                                <td> <a href="{% url namespace|add:':'|add:model|lower|add:'-detail' pk=obj.id %}"> {{ v }} </a> </td>
+                            {% elif k in keys %}
+                                <td> {{ v }} </td>
+                            {% endif %}
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock right_pane %}

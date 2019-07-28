@@ -45,7 +45,7 @@ class User(AbstractUser):
         super().save(*args, **kwargs)
 
 class Team(models.Model):
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=50, unique=True, null=False, blank=False)
     description = models.CharField(max_length=500)
     members = models.ManyToManyField(User, limit_choices_to={"is_active": True}, related_name="members")
 

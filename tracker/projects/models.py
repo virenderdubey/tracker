@@ -3,11 +3,11 @@ from accounts.models import User, Team
 
 
 class Project(models.Model):
-    name = models.CharField(max_length=100, unique=True)
+    name = models.CharField(max_length=100, unique=True, null=False, blank=False)
     description = models.CharField(max_length=500, null=True)
-    owner = models.ForeignKey(User, on_delete=models.PROTECT, limit_choices_to={"status": True})
-    key = models.CharField(max_length=10, unique=True)
-    sequence = models.PositiveIntegerField()
+    owner = models.ForeignKey(User, on_delete=models.PROTECT, limit_choices_to={"is_active": True})
+    key = models.CharField(max_length=10, unique=True, null=False, blank=False)
+    sequence = models.PositiveIntegerField(default=1)
     status = models.BooleanField(default=True)
 
     created_on = models.DateTimeField(auto_now_add=True)
@@ -17,7 +17,7 @@ class Project(models.Model):
 
 
 class Permissions(models.Model):
-    name = models.CharField(max_length=100, unique=True)
+    name = models.CharField(max_length=100, unique=True, null=False, blank=False)
     description = models.CharField(max_length=500, null=True)
 
     created_on = models.DateTimeField(auto_now_add=True)
