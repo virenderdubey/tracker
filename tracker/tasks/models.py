@@ -26,18 +26,27 @@ class Task(models.Model):
         ("P3", "P3"),
     )
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
-    tasknum = models.PositiveIntegerField()
     tasktype = models.ForeignKey(TaskType, on_delete=models.CASCADE)
     summary = models.CharField(max_length=100, blank=False, null=False, unique=False)
     description = models.TextField()
     priority = models.CharField(choices=TASK_PRIORITY, max_length=3, default="P3")
-    reporter = models.ForeignKey(User, on_delete=models.CASCADE, related_name="task_created_by")
-    modified_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="task_modified_by")
     assignee = models.ForeignKey(User, on_delete=models.CASCADE, related_name="task_assigned_to")
+    tasknum = models.PositiveIntegerField(editable=False)
     due_date = models.DateTimeField(default=None)
+
     created_on = models.DateTimeField(auto_now_add=True)
     modified_on = models.DateTimeField(auto_now=True)
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="task_created_by")
+    modified_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="task_modified_by")
 
+    @property
+    def reporter(self):
+        return self.created_by
+
+    def save(self, *args, **kwargs):
+        if self.tasknum is None:
+            self.tasknum = 0
+        super().save(*args, **kwargs)
 
 class TaskDependency(models.Model):
     """ Creating Task Dependencies """
@@ -63,3 +72,16 @@ class Comments(models.Model):
     modified_on = models.DateTimeField(auto_now=True)
     created_by = models.ForeignKey(User, on_delete=models.PROTECT, related_name="comments_created_by")
     modified_by = models.ForeignKey(User, on_delete=models.PROTECT, related_name="comments_modified_by")
+
+class Filters(models.Model):
+    """ Model to create Search Filters """
+    name = models.CharField(max_length=100, unique=True, null=False, blank=False)
+    description = models.CharField(max_length=500, null=True)
+    fields = models.CharField(max_length=500, null=False, blank=False)
+    ordering = models.CharField(max_length=500, default="modified_on")
+    status = models.BooleanField(default=True)
+
+    created_on = models.DateTimeField(auto_now_add=True)
+    modified_on = models.DateTimeField(auto_now=True)
+    created_by = models.ForeignKey(User, on_delete=models.PROTECT, related_name="filters_created_by")
+    modified_by = models.ForeignKey(User, on_delete=models.PROTECT, related_name="filters_modified_by")

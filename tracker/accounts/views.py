@@ -6,12 +6,14 @@ from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import redirect, render
 from django.conf import settings
 
-
-
+from accounts.forms import UserForm, TeamForm
+from accounts.models import User, Team
+from home.base_views import BaseView
 
 import logging
 
 logger = logging.getLogger(__name__)
+
 
 class LogoutView(RedirectView):
     url = settings.LOGIN_URL
@@ -69,5 +71,12 @@ class LoginView(View):
 class AboutView(TemplateView):
     template_name = "about.html"
 
-class TeamsView(View):
-    template_name = "teams.html"
+class TeamView(BaseView):
+    form = TeamForm
+    model = Team
+    app = "accounts"
+
+class UserView(BaseView):
+    form = UserForm
+    model = User
+    app = "accounts"

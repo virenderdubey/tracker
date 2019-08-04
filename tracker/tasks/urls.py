@@ -1,9 +1,10 @@
 from django.urls import include, path
 
-from tasks.views import TaskTypeView
+from tasks.views import TaskTypeView, TaskView
 
 app_name = 'tasks'
 
 urlpatterns = [
-    path('type/', TaskTypeView.as_view(), name='tasktype-list'),
+    path('create/', TaskView.as_view(), {"action": "create" }, name='create'),
+    path('search/', TaskView.as_view(), {"action": "search" }, name='search'),
 ]

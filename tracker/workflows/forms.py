@@ -1,29 +1,27 @@
 from django import forms
 
-from projects.models import Project, Roles, Permissions
+from workflows.models import WorkflowStates, WorkflowTransitions, Workflow
 
-class ProjectForm(forms.ModelForm):
+class WorkflowStatesForm(forms.ModelForm):
     ui_fields = ['id', 'name']
     link = "name"
 
     class Meta:
-        model = Project
+        model = WorkflowStates
         exclude = ('created_on', 'modified_on', 'created_by', 'modified_by')
 
-
-class RolesForm(forms.ModelForm):
-    ui_fields = ['id', 'permission', 'project']
-    link = "id"
-
-    class Meta:
-        model = Roles
-        exclude = ('created_on', 'modified_on', 'created_by', 'modified_by')
-
-
-class PermissionsForm(forms.ModelForm):
+class WorkflowTransitionsForm(forms.ModelForm):
     ui_fields = ['id', 'name']
     link = "name"
 
     class Meta:
-        model = Permissions
+        model = WorkflowTransitions
+        exclude = ('created_on', 'modified_on', 'created_by', 'modified_by')
+
+class WorkflowForm(forms.ModelForm):
+    ui_fields = ['id', 'name']
+    link = "name"
+
+    class Meta:
+        model = Workflow
         exclude = ('created_on', 'modified_on', 'created_by', 'modified_by')

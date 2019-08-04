@@ -21,7 +21,8 @@ urlpatterns = [
     path('accounts/', include('accounts.urls', namespace='accounts')),
     path('admin/projects/', include('projects.urls', namespace='projects')),
     path('admin/workflow/', include('workflows.urls', namespace='workflows')),
-    path('admin/tasks/', include('tasks.urls', namespace='tasks')),
+    path('admin/tasks/', include('tasks.admin.urls', namespace='admin_tasks')),
+    path('tasks/', include('tasks.urls', namespace='tasks')),
     path('', include('home.urls', namespace='home')),
     path('djadmin/', admin.site.urls),
 ]

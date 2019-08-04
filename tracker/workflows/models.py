@@ -13,6 +13,12 @@ class WorkflowStates(models.Model):
     created_by = models.ForeignKey(User, on_delete=models.PROTECT, related_name="workflow_state_created_by")
     modified_by = models.ForeignKey(User, on_delete=models.PROTECT, related_name="workflow_state_modified_by")
 
+    def __str__(self):
+        return self.name
+    
+    class Meta:
+        ordering = ['name']
+
 
 class WorkflowTransitions(models.Model):
     """ Model to create Workflow Transition """
@@ -26,6 +32,11 @@ class WorkflowTransitions(models.Model):
     created_by = models.ForeignKey(User, on_delete=models.PROTECT, related_name="workflow_transition_created_by")
     modified_by = models.ForeignKey(User, on_delete=models.PROTECT, related_name="workflow_transition_modified_by")
 
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        ordering = ['name']
 
 class Workflow(models.Model):
     """ Model to create Workflow """
@@ -37,3 +48,9 @@ class Workflow(models.Model):
     modified_on = models.DateTimeField(auto_now=True)
     created_by = models.ForeignKey(User, on_delete=models.PROTECT, related_name="workflow_created_by")
     modified_by = models.ForeignKey(User, on_delete=models.PROTECT, related_name="workflow_modified_by")
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        ordering = ['name']

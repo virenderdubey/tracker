@@ -12,28 +12,37 @@
     {% block left_pane %}
       <ul class="nav flex-column">
         <li class="nav-item left-pane-headings">
-          <a href="{% url 'home:admin' %}"> 
+          <a href="{% url 'projects:project-list' %}"> 
             <h5 class="text-muted"> Administration </h5> 
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link active" href="{% url 'accounts:users-list' %}"> Users </a>
+          <a class="nav-link active" href="{% url 'accounts:user-list' %}"> Users </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link active" href="{% url 'accounts:teams-list' %}"> Teams </a>
+          <a class="nav-link active" href="{% url 'accounts:team-list' %}"> Teams </a>
         </li>
         <li class="nav-item">
           <a class="nav-link active" href="{% url 'projects:project-list' %}"> Projects </a>
         </li>
-        <!-- <li class="nav-item">
-          <a class="nav-link active" href="{% url 'tasks:tasktype-list' %}"> Tasks Type </a>
+        <li class="nav-item">
+          <a class="nav-link active" href="{% url 'admin_tasks:tasktype-list' %}"> Tasks Type </a>
         </li>
         <li class="nav-item">
           <a class="nav-link active" href="{% url 'projects:permissions-list' %}"> Permissions </a>
         </li>
         <li class="nav-item">
           <a class="nav-link active" href="{% url 'projects:roles-list' %}"> Roles </a>
-        </li> -->
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="{% url 'workflows:workflow-list' %}"> Workflows </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="{% url 'workflows:workflowstates-list' %}"> Workflows States </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="{% url 'workflows:workflowtransitions-list' %}"> Workflows Transitions </a>
+        </li>
       </ul>
     {% endblock left_pane %}
     </nav>

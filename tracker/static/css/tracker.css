@@ -58,3 +58,19 @@ h2.signup {
 h5.left-pane-headings {
     text-align: center;
 }
+
+.title {
+    display: inline;
+}
+
+.header {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+.add-new {
+    float: right;
+}
+
+.right-pane {
+    margin-left: 20px;
+}

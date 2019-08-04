@@ -1,10 +1,15 @@
 <!-- templates/home.html-->
 {% extends 'headers.html' %}
 {% load static %}
+{% load extras %}
+
 
 {% block title %} Home {% endblock %}
 
 {% block content %}
-    welcome {{user}}
+    <div class="conainer">
+            welcome {{user.username}}    
+            {{ request.session|get_value:user.username }}
+    </div>
 {% endblock content %}
 

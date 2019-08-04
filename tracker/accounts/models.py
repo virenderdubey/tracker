@@ -46,7 +46,7 @@ class User(AbstractUser):
 
 class Team(models.Model):
     name = models.CharField(max_length=50, unique=True, null=False, blank=False)
-    description = models.CharField(max_length=500)
+    description = models.CharField(max_length=500, null=True, blank=True)
     members = models.ManyToManyField(User, limit_choices_to={"is_active": True}, related_name="members")
 
     created_on = models.DateTimeField(auto_now_add=True)

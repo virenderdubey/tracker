@@ -16,13 +16,11 @@
     <!-- Adding Search Bar -->
     <!-- Adding Tables -->
 
-    <div class="model-header">
-        <h3 class="title"> {{ model | upper }} List </h3>
-    </div>
-    <div class="ml-auto">
-        <li class="add-new"> <a class="add-new" href="{% url namespace|add:':'|add:model|lower|add:'-detail' %}"> ADD {{ model|upper }}
+    <div class="header">
+        <h3 class="title"> {{ model | title }} List </h3>
+        <a class="add-new" href="{% url namespace|add:':'|add:model|cut:' '|lower|add:'-detail' %}"> ADD {{ model|upper }}
             <img src="{% static 'admin/img/tooltag-add.svg' %}" alt="">
-        </li>
+        </a>
     </div>
 
     <div class="list table-responsive">
@@ -40,7 +38,7 @@
                     <tr>
                         {% for k, v in obj.items %}
                             {% if k == link %}
-                                <td> <a href="{% url namespace|add:':'|add:model|lower|add:'-detail' pk=obj.id %}"> {{ v }} </a> </td>
+                                <td> <a href="{% url namespace|add:':'|add:model|cut:' '|lower|add:'-detail' pk=obj.id %}"> {{ v }} </a> </td>
                             {% elif k in keys %}
                                 <td> {{ v }} </td>
                             {% endif %}

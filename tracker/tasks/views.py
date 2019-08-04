@@ -1,8 +1,36 @@
 from django.shortcuts import render
 from django.views.generic import TemplateView, View
+from django.http.response import HttpResponse
+from home.base_views import BaseView
+from tasks.models import TaskType, Task
+from tasks.forms import TaskTypeForm, TaskForm
+
 
 
 # Create your views here.
-class TaskTypeView(View):
-    template_name = "tasktype.html"
+class TaskTypeView(BaseView):
+    form = TaskTypeForm
+    model = TaskType
+    app = "admin_tasks"
+    model_name = "Task Type"
+
+
+class TaskView(View):
+    template = "create.html"
+
+    def create(self, request, *args, **kwargs):
+        context={
+            "form" : TaskForm()
+        }
+        return render(request, self.template, context)
+
+    def get(self, request, action, *args, **kwargs):
+        if action == "create":
+            return self.create(request, *args, **kwargs)
+        elif action == "search":
+            return HttpResponse("Action is in Progress")
+        
+
+    def post(self, request, action, *args, **kwargs):
+        return HttpResponse("Post Api Creation in Progress")
 

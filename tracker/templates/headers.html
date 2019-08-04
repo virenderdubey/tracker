@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load extras %}
 
 {% block header %}
 <nav class="navbar navbar-expand-lg navbar-dark sticky-top bg-primary">
@@ -8,36 +9,45 @@
       <img src="{% static 'images/header.png' %}" alt="" srcset="" width="120px">
     </a>
   {% endblock logo %}
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsTrackerDefault" aria-controls="navbarsTrackerDefault" aria-expanded="false" aria-label="Toggle navigation">
+
+  <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsTrackerDefault" aria-controls="navbarsTrackerDefault" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse" id="navbarsTrackerDefault">
+  </button> -->
+  <div class="navbar collapse navbar-collapse" >
     {% if user.is_authenticated %}
+      {% block nav-icons %}
       <ul class="navbar-nav mr-auto">
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="http://example.com" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Projects</a>
+          <a class="nav-link dropdown-toggle" href="" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Projects</a>
           <div class="dropdown-menu" aria-labelledby="dropdown01">
-            <a class="dropdown-item" href="#">Action</a>
-            <a class="dropdown-item" href="#">Another action</a>
-            <a class="dropdown-item" href="#">Something else here</a>
+            {% for project in request.session|get_value:user.username|get_value:"projects" %}
+              <a class="dropdown-item" href="#"> {{ project }}</a>
+            {% endfor %}
           </div>
         </li>
         <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="http://example.com" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Issues</a>
+            <a class="nav-link dropdown-toggle" href="" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Issues</a>
             <div class="dropdown-menu" aria-labelledby="dropdown01">
-              <a class="dropdown-item" href="#">Action</a>
-              <a class="dropdown-item" href="#">Another action</a>
-              <a class="dropdown-item" href="#">Something else here</a>
+              {% for filters in request.session|get_value:user.username|get_value:"filters" %}
+                <a class="dropdown-item" href="#"> {{ filters }} </a>
+              {% endfor %}
             </div>
         </li>
+        <li class="nav-item dropdown">
+            <a class="nav-link btn btn-primary" href="{% url 'tasks:create' %}"> Create </a>
+        </li>
       </ul>
-
-      <form class="form-inline my-4 my-lg-0">
+      {% endblock nav-icons %}
+      {% block search-bar %}
+      <form class="form-inline my-4 my-lg-0" action="{% url 'tasks:search' %}", method="GET">
         <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
       </form>
+      {% endblock search-bar %}
+      {% block aboutus %}
+        <a class="my-2 my-sm-0" href="{% url 'home:about' %}"> About Us </a>
+      {% endblock aboutus %}
 
-      <a class="my-2 my-sm-0" href="{% url 'home:about' %}">About Us </a>
-
+      {% block userinfo %}
       <ul class="navbar-nav ml-auto">
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
@@ -55,6 +65,7 @@
             </div>
         </li>
       </ul>
+      {% endblock userinfo %}
     {% else %}
     <div class="ml-auto">
       {% block signin %}
