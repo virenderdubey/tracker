@@ -1,0 +1,1 @@
+[{"model": "tasks.tasktype", "pk": 1, "fields": {"name": "BUG", "description": "BUG", "workflow": 1, "created_on": "2019-08-04T15:11:03.398Z", "modified_on": "2019-08-04T17:28:08.162Z", "created_by": 1, "modified_by": 1}}
