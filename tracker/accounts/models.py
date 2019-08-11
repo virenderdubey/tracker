@@ -22,8 +22,8 @@ class User(AbstractUser):
     aboutme = models.TextField()
     mobile = models.CharField(max_length=12)
 
-    created_on = models.DateTimeField(auto_now_add=True)
-    modified_on = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    modified_at = models.DateTimeField(auto_now=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
@@ -49,7 +49,7 @@ class Team(models.Model):
     description = models.CharField(max_length=500, null=True, blank=True)
     members = models.ManyToManyField(User, limit_choices_to={"is_active": True}, related_name="members")
 
-    created_on = models.DateTimeField(auto_now_add=True)
-    modified_on = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    modified_at = models.DateTimeField(auto_now=True)
     created_by = models.ForeignKey(User, on_delete=models.PROTECT, related_name="team_created_by")
     modified_by = models.ForeignKey(User, on_delete=models.PROTECT, related_name="team_modified_by")

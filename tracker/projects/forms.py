@@ -8,7 +8,7 @@ class ProjectForm(forms.ModelForm):
 
     class Meta:
         model = Project
-        exclude = ('created_on', 'modified_on', 'created_by', 'modified_by')
+        exclude = ('created_at', 'modified_at', 'created_by', 'modified_by')
 
 
 class RolesForm(forms.ModelForm):
@@ -17,7 +17,7 @@ class RolesForm(forms.ModelForm):
 
     class Meta:
         model = Roles
-        exclude = ('created_on', 'modified_on', 'created_by', 'modified_by')
+        exclude = ('created_at', 'modified_at', 'created_by', 'modified_by')
 
 
 class PermissionsForm(forms.ModelForm):
@@ -26,4 +26,4 @@ class PermissionsForm(forms.ModelForm):
 
     class Meta:
         model = Permissions
-        exclude = ('created_on', 'modified_on', 'created_by', 'modified_by')
+        exclude = ('created_at', 'modified_at', 'created_by', 'modified_by')

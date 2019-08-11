@@ -13,7 +13,7 @@
   <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsTrackerDefault" aria-controls="navbarsTrackerDefault" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button> -->
-  <div class="navbar collapse navbar-collapse" >
+  <div class="navbar collapse navbar-collapse">
     {% if user.is_authenticated %}
       {% block nav-icons %}
       <ul class="navbar-nav mr-auto">
@@ -21,15 +21,15 @@
           <a class="nav-link dropdown-toggle" href="" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Projects</a>
           <div class="dropdown-menu" aria-labelledby="dropdown01">
             {% for project in request.session|get_value:user.username|get_value:"projects" %}
-              <a class="dropdown-item" href="#"> {{ project }}</a>
+              <a class="dropdown-item" href="{% url 'tasks:search' %}?project={{ project.name | urlencode }}"> {{ project.name }}</a>
             {% endfor %}
           </div>
         </li>
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Issues</a>
             <div class="dropdown-menu" aria-labelledby="dropdown01">
-              {% for filters in request.session|get_value:user.username|get_value:"filters" %}
-                <a class="dropdown-item" href="#"> {{ filters }} </a>
+              {% for filter in request.session|get_value:user.username|get_value:"filters" %}
+                <a class="dropdown-item" href="{% url 'tasks:search' %}?filter={{ filter.id }}"> {{ filter.name }} </a>
               {% endfor %}
             </div>
         </li>

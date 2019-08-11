@@ -8,7 +8,7 @@ class WorkflowStatesForm(forms.ModelForm):
 
     class Meta:
         model = WorkflowStates
-        exclude = ('created_on', 'modified_on', 'created_by', 'modified_by')
+        exclude = ('created_at', 'modified_at', 'created_by', 'modified_by')
 
 class WorkflowTransitionsForm(forms.ModelForm):
     ui_fields = ['id', 'name']
@@ -16,7 +16,7 @@ class WorkflowTransitionsForm(forms.ModelForm):
 
     class Meta:
         model = WorkflowTransitions
-        exclude = ('created_on', 'modified_on', 'created_by', 'modified_by')
+        exclude = ('created_at', 'modified_at', 'created_by', 'modified_by')
 
 class WorkflowForm(forms.ModelForm):
     ui_fields = ['id', 'name']
@@ -24,4 +24,4 @@ class WorkflowForm(forms.ModelForm):
 
     class Meta:
         model = Workflow
-        exclude = ('created_on', 'modified_on', 'created_by', 'modified_by')
+        exclude = ('created_at', 'modified_at', 'created_by', 'modified_by')

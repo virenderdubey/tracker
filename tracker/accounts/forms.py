@@ -22,7 +22,7 @@ class UserForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ('first_name', 'last_name', 'username', 'email', 'is_active', 'is_superuser', 'mobile', 'avatar', 'aboutme')
-        # exclude = ('created_on', 'modified_on', 'created_by', 'modified_by')
+        # exclude = ('created_at', 'modified_at', 'created_by', 'modified_by')
 
 class TeamForm(forms.ModelForm):
     ui_fields = ['id', 'name']
@@ -30,4 +30,4 @@ class TeamForm(forms.ModelForm):
 
     class Meta:
         model = Team
-        exclude = ('created_on', 'modified_on', 'created_by', 'modified_by')
+        exclude = ('created_at', 'modified_at', 'created_by', 'modified_by')
