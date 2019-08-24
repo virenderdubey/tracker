@@ -20,14 +20,13 @@
 
 <div class="container">
     <div class="header">
-        <h3 class="title"> {{ project | title }} Tasks </h3>
+        <h3 class="title"> {{ name | title }} </h3>
     </div>
-    Query Set {{ queryset }}
 
     <div class="list table-responsive">
         <table class="table table-striped table-hover table-border" id="list-data">
             <thead class="thead-light">
-                {% for key in keys %} 
+                {% for key in keys %}
                     <th>
                         {{ key|upper }}
                     </th>
@@ -36,10 +35,10 @@
 
             <tbody>
                 {% for obj in queryset %}
-                    <tr>
+                    <tr> 
                         {% for k, v in obj.items %}
                             {% if k == link %}
-                                <td> {{ v }} </td>
+                            <td> <a href="{% url 'tasks:browse' task_key=v %} "> {{ v }}  </a> </td>
                             {% elif k in keys %}
                                 <td> {{ v }} </td>
                             {% endif %}

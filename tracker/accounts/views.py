@@ -3,8 +3,9 @@ from accounts.forms import CustomUserCreationForm
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, CreateView, View, RedirectView
 from django.contrib.auth import authenticate, login, logout
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, reverse
 from django.conf import settings
+from django.http.response import JsonResponse
 
 from accounts.forms import UserForm, TeamForm
 from accounts.models import User, Team
@@ -40,12 +41,13 @@ class LoginView(View):
     error = None
 
     def _update_session(self, request, username, **kwargs):
-        print(self.request.session)
-        print(self.request.session.items())
-
-        if username not in self.request.session:
-            self.request.session[username] = {}
-        self.request.session[username].update(**kwargs)
+        if username:
+            if username not in self.request.session:
+                self.request.session[username] = {}
+            self.request.session[username].update(**kwargs)
+        else:
+            for key, value in kwargs.items():
+                self.request.session[key]=value
         self.request.session.modified=True
 
     def post(self, request, *args, **kwargs):
@@ -57,15 +59,14 @@ class LoginView(View):
             user = authenticate(username=username, password=password)
             if user is None:
                 raise Exception(error)
-            else:
-                login(self.request, user)
-                self._update_session(request, username, auth=True)
+            login(self.request, user)
+            self._update_session(request, username, auth=True)
+            return redirect(reverse('home:home'))
         except Exception as e:
             logging.exception(e)
-            self._update_session(request, username, error=error)
-            context["error"] = str(e)
-        finally:
-            return redirect('home:home')
+            self._update_session(request, username, auth=False, error=error)
+            self._update_session(request, None, login_error=error)
+            return redirect(reverse('home:home'))
 
 
 class AboutView(TemplateView):

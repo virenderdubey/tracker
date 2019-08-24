@@ -1,0 +1,84 @@
+{% extends 'headers.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %} Tasks {% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    {% if error %}
+        <div class="error">
+            <h3 class="error"> {{ error }} </h3>
+        </div>
+    {% else %}
+        <div class="task-view">
+            <div class="task-header">
+                <h5 class="breadcumb">
+                    <a href="{% url 'tasks:search' %}?project={{obj.project.name}}"> {{ obj.project.name | title }} </a>
+                    /
+                    <a href="{% url 'tasks:search' %}?project={{obj.project.name}}&tasktype={{obj.tasktype.name}}"> {{ obj.tasktype.name | title }} </a>
+                    /
+                    <a href="{% url 'tasks:browse' task_key=obj.key %}"> {{ obj.key }} </a>
+                </h5>
+                <p class="task-fields summary">
+                    {{ obj.summary }}
+                </p>
+            </div>
+            <div class="task-options">
+                {% for row in task_options %}
+                    <button class="btn btn-primary"> {{ row.name }} </button>
+                {% endfor %}
+                {% if workflow_options|length == 1 %}
+                    {% for options in workflow_options %}
+                        <a class="dropdown-item" href="{% url 'tasks:search' %}?project={{ options.name }}"> {{ options.name }}</a>
+                    {% endfor %}
+                {% else %}
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Projects</a>
+                            <div class="dropdown-menu" aria-labelledby="dropdown01">
+                                {% for options in workflow_options %}
+                                    <a class="dropdown-item" href="{% url 'tasks:search' %}?project={{ options.name }}"> {{ options.name }}</a>
+                                {% endfor %}
+                            </div>
+                        </li>
+                    </ul>
+                {% endif %}                
+            </div>
+            <div class="task-body row">
+                <div class="col-sm-8">
+                    <div class="task-fields">
+                        <label class="field-label" for="priority"> Priority: </label> {{ obj.priority }}
+                    </div>
+                    <div class="task-fields">
+                        <label class="field-label" for="priority"> State: </label> {{ obj.state }}
+                    </div>
+                    <div class="task-fields">
+                        <label class="field-label" for="priority"> DueDate: </label> {{ obj.duedate }}
+                    </div>
+                    <div class="task-fields">
+                        <label class="field-label" for="priority"> Description: </label> {{ obj.description }}
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="task-fields">
+                        <label class="field-label" for="priority"> Assignee: </label> {{ obj.assignee }}
+                    </div>
+                    <div class="task-fields">
+                        <label class="field-label" for="priority"> Reporter: </label> {{ obj.reporter }}
+                    </div>
+                </div>
+            </div>
+            <div class="subtasks-list">
+                <h4> Subtasks </h4>
+            </div>
+            <div class="task-attachments">
+                <h4> Attachments </h4>
+            </div>
+            <div class="task-comments">
+                <h4> Comments </h4>
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock content %}

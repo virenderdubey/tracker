@@ -30,13 +30,13 @@ class User(AbstractUser):
 
     def get_full_name(self):
         return f"{self.first_name} {self.last_name}"
-    
+
     def get_short_name(self):
         return f"{self.first_name}"
 
     def __str__(self):
         return self.get_full_name()
-    
+
     def save(self, *args, **kwargs):
         if not self.first_name:
             self.first_name = self.username
@@ -53,3 +53,6 @@ class Team(models.Model):
     modified_at = models.DateTimeField(auto_now=True)
     created_by = models.ForeignKey(User, on_delete=models.PROTECT, related_name="team_created_by")
     modified_by = models.ForeignKey(User, on_delete=models.PROTECT, related_name="team_modified_by")
+
+    def __str__(self):
+        return self.name

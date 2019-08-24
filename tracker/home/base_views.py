@@ -86,7 +86,6 @@ class BaseView(View):
             """ This is either Update or Delete Request """
             if action == 'change':
                 form = self.form(request.POST, instance=instance)
-
             elif action == 'delete':
                 instance.delete()
                 return HttpResponseRedirect(reverse(uri))
@@ -99,13 +98,14 @@ class BaseView(View):
         self.context['template'] = 'change.html'
 
         if form.is_valid():
-            self.form_valid(form, pk)
+            self.save_form(form, pk)
             return HttpResponseRedirect(reverse(uri))
         else:
             return render(request, self.context.get("template"), self.context)
 
-    def form_valid(self, form, pk):
+    def save_form(self, form, pk):
         user = self.request.user
+        form._save_m2m()
         obj = form.save(commit=False)
         obj.modified_by = user
         if not pk:

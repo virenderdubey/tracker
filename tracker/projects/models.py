@@ -1,5 +1,10 @@
+import logging
 from django.db import models
 from accounts.models import User, Team
+from django.db import transaction
+
+
+logger = logging.getLogger(__name__)
 
 
 class Project(models.Model):
@@ -17,6 +22,18 @@ class Project(models.Model):
 
     def __str__(self):
         return self.name
+
+    @classmethod
+    def get_sequence(self, project):
+        try:
+            with transaction.atomic():
+                obj = Project.objects.get(name=project)
+                sequence = obj.sequence
+                obj.sequence+=1
+                obj.save()
+                return sequence
+        except Exception as e:
+            logger.exception(e)
 
 
 class Permissions(models.Model):

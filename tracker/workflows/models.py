@@ -1,6 +1,8 @@
+import logging
 from django.db import models
 from accounts.models import User
 
+logger = logging.getLogger(__name__)
 
 # Create your models here.
 class WorkflowStates(models.Model):
@@ -15,7 +17,7 @@ class WorkflowStates(models.Model):
 
     def __str__(self):
         return self.name
-    
+
     class Meta:
         ordering = ['name']
 
@@ -33,10 +35,11 @@ class WorkflowTransitions(models.Model):
     modified_by = models.ForeignKey(User, on_delete=models.PROTECT, related_name="workflow_transition_modified_by")
 
     def __str__(self):
-        return self.name
+        return "%s : %s" %(self.name, self.description)
 
     class Meta:
-        ordering = ['name']
+        ordering = ['modified_at', 'name']
+
 
 class Workflow(models.Model):
     """ Model to create Workflow """
@@ -54,3 +57,14 @@ class Workflow(models.Model):
 
     class Meta:
         ordering = ['name']
+
+    def get_avilable_transitions(self, transition):
+        next_transition = []
+        try:
+            for row in self.transitions.get_queryset():
+                if row.from_state.name == transition:
+                    next_transition.append(row.to_state.name)
+        except Exception as e:
+            logger.exception(e)
+        finally:
+            return next_transition

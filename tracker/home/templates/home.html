@@ -4,6 +4,20 @@
 
 {% block title %} Home {% endblock %}
 
+{% block customjs %}
+  <script type="text/javascript">
+    $(function(){
+    $('#loginModal').modal({
+      show: true,
+      focus: true
+    });
+    $('#loginModal').on('hide.bs.modal', function(e){
+        $('#login_error').val("");
+    });
+    });
+  </script>
+{% endblock %}
+
 {% block content %}
 <!-- Login Modal -->
 <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
@@ -15,12 +29,12 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form action="{% url 'accounts:login' %}" method="post">
-        {% csrf_token %}
+        <form action="{% url 'accounts:login' %}" method="post">
+          {% csrf_token %}
         <div class="modal-body">
-          <div class="error">
-            <p> {{ error }}</p>
-          </div>
+        <div class="error">
+          <p id="login_error"> {{ error }}</p>
+        </div>
           <div class="login">
             <div class="form-group row">
               <label for="id_username" class="col-sm-3 col-form-label">Username: </label>
