@@ -5,8 +5,8 @@ from django.views.generic import TemplateView, View
 from django.http.response import HttpResponse
 from home.base_views import BaseView
 from projects.models import Project
-from tasks.models import TaskType, Task, Filters
-from tasks.forms import TaskTypeForm, TaskForm, FiltersForm
+from tasks.models import TaskType, Task, Filters, Comments, TaskDependency, Attachments
+from tasks.forms import TaskTypeForm, TaskForm, FiltersForm, CommentsForm, AttachmentsForm
 from projects.models import Project
 from django.db.models import Q
 from django.shortcuts import redirect, reverse
@@ -103,24 +103,34 @@ class TaskView(View):
         try:
             obj = Task.objects.get(key=task_key)
             transitions = obj.tasktype.get_avilable_transitions(obj.state)
+            comments = Comments.objects.filter(task=obj.id).values('comment', 'created_by__username')
+            attachments = Attachments.objects.filter(task=obj.id).values('file_path')
+            new_comments_form = CommentsForm()
+            upload_attachments_form = AttachmentsForm()
+
             task_options = [
                 { "name" : "edit", },
-                { "name" : "create subtask" },
+                { "name" : "create subtask" }
             ]
             for row in transitions:
                 buttons.append(
                     { "name": row }
                 )
+
             workflow_options = buttons
             context["task_options"] = task_options
             context["workflow_options"] = workflow_options
+            context["comments"] = comments
+            context["attachments"] = attachments
+            context["new_comments_form"] = new_comments_form
+            context["upload_attachments_form"] = upload_attachments_form
+
         except Exception as e:
             logger.exception(e)
             error = f"The requested resource {task_key} is either invalid or not found.!!!"
         finally:
             context["obj"] = obj
             context["error"] = error
-            print(context)
             return render(request, template, context)
 
     def get_tasks_detail(self, project_name, tasktype):
@@ -188,16 +198,46 @@ class TaskView(View):
         else:
             return HttpResponse("Unknown Action Receieved.")
 
-    def post(self, request, action, pk=None, *args, **kwargs):
-        form = self.form(request.POST)
-        if form.is_valid():
-            key = self.form_valid(form, pk)
-            return redirect(reverse('tasks:browse', kwargs={"task_key": key}))
-        else:
-            context = {
-                "form": form,
-            }
+    def handle_uploaded_file(self, f):
+        with open('some/file/name.txt', 'wb+') as destination:
+            for chunk in f.chunks():
+                destination.write(chunk)
+
+    def post(self, request, action, task_key=None, pk=None, *args, **kwargs):
+        if action == "create":
+            form = self.form(request.POST)
+            if form.is_valid():
+                key = self.form_valid(form, pk)
+                return redirect(reverse('tasks:browse', kwargs={"task_key": key}))
+            else:
+                context = {
+                    "form": form,
+                }
             return render(request, self.template, context)
+        elif action == 'browse':
+            task_obj = Task.objects.get(key=task_key)
+            user = self.request.user
+            comment = request.POST.get("comment")
+            
+            # Uploading Attachments
+            if request.FILES:
+                form = AttachmentsForm(request.POST, request.FILES)
+                if form.is_valid():
+                    obj = form.save(commit=False)
+                    obj.created_by = user
+                    obj.task = task_obj
+                    obj.save()
+
+            # Adding Comments
+            if comment:
+                form = CommentsForm(request.POST)
+                if form.is_valid():
+                    obj = form.save(commit=False)
+                    obj.task=task_obj
+                    obj.modified_by = user
+                    obj.created_by = user
+                    obj.save()
+            return redirect('tasks:browse', task_key=task_key)
 
     def form_valid(self, form, pk):
         user = self.request.user

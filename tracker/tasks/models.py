@@ -93,12 +93,13 @@ class Attachments(models.Model):
 class Comments(models.Model):
     """ Comments Model """
     task = models.ForeignKey(Task, on_delete=models.CASCADE, unique=False)
-    comments = models.TextField()
+    comment = models.TextField()
 
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
     created_by = models.ForeignKey(User, on_delete=models.PROTECT, related_name="comments_created_by")
     modified_by = models.ForeignKey(User, on_delete=models.PROTECT, related_name="comments_modified_by")
+
 
 class Filters(models.Model):
     """ Model to create Search Filters """

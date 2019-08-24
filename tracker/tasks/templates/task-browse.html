@@ -25,20 +25,20 @@
                 </p>
             </div>
             <div class="task-options">
-                {% for row in task_options %}
-                    <button class="btn btn-primary"> {{ row.name }} </button>
-                {% endfor %}
+                    <a class="btn btn-primary task-option" href="{% url 'tasks:create' %}"> Edit </a>
+                <a class="btn btn-primary task-option" href="{% url 'tasks:create' %}"> Create Sub-Task </a>
+
                 {% if workflow_options|length == 1 %}
                     {% for options in workflow_options %}
-                        <a class="dropdown-item" href="{% url 'tasks:search' %}?project={{ options.name }}"> {{ options.name }}</a>
+                        <a class="btn dropdown-item" href="{% url 'tasks:search' %}?project={{ options.name }}"> {{ options.name }}</a>
                     {% endfor %}
                 {% else %}
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Projects</a>
+                            <a class="btn btn-primary task-option nav-link dropdown-toggle" href="" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Workflow</a>
                             <div class="dropdown-menu" aria-labelledby="dropdown01">
                                 {% for options in workflow_options %}
-                                    <a class="dropdown-item" href="{% url 'tasks:search' %}?project={{ options.name }}"> {{ options.name }}</a>
+                                    <a class="dropdown-item" href="{% url 'tasks:browse' obj.key %}"> {{ options.name }} </a>
                                 {% endfor %}
                             </div>
                         </li>
@@ -74,9 +74,35 @@
             </div>
             <div class="task-attachments">
                 <h4> Attachments </h4>
+                {% for row in attachments %}
+                    <div class="attachments">
+                        {{ row.file_path }}
+                    </div>
+                {% endfor %}
+                <form method="post" action="{% url 'tasks:browse' obj.key %}" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ upload_attachments_form | crispy }}
+                    <input class="btn btn-primary attachments-submit" type="submit" value="Attach">
+                </form>
             </div>
             <div class="task-comments">
                 <h4> Comments </h4>
+                {% for row in comments %}
+                    <div class="card comments-card">
+                        <div class="card-title comment-header">
+                            <h6 class="comment-owner"> Added By {{ row.created_by__username }} </h6>
+                            
+                        </div>
+                        <div class="card-body comment-body">
+                            {{ row.comment }}
+                        </div>
+                    </div>
+                {% endfor %}
+                <form action="{% url 'tasks:browse' obj.key %}" method="post">
+                    {% csrf_token %}
+                    {{ new_comments_form | crispy }}
+                    <input class="btn btn-primary comment-submit" type="submit" value="Add Comments">
+                </form>
             </div>
         </div>
     {% endif %}

@@ -26,8 +26,11 @@
           </div>
         </li>
         <li class="nav-item dropdown">
+            
             <a class="nav-link dropdown-toggle" href="" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Issues</a>
             <div class="dropdown-menu" aria-labelledby="dropdown01">
+              <a class="dropdown-item" href="{% url 'tasks:search' %}"> Issues </a>
+              <div class="dropdown-divider"> </div>
               {% for filter in request.session|get_value:user.username|get_value:"filters" %}
                 <a class="dropdown-item" href="{% url 'tasks:search' %}?filter={{ filter.id }}"> {{ filter.name }} </a>
               {% endfor %}
@@ -39,16 +42,18 @@
         <li class="nav-item dropdown">
             <a class="nav-link btn btn-primary" href="{% url 'tasks:create' %}"> Create </a>
         </li>
+        <li class="nav-item dropdown">
+            <a class="nav-link" href="{% url 'home:about' %}"> About Us </a>
+        </li>
       </ul>
       {% endblock nav-icons %}
+
       {% block search-bar %}
       <form class="form-inline my-4 my-lg-0" action="{% url 'tasks:search' %}", method="GET">
         <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
       </form>
       {% endblock search-bar %}
-      {% block aboutus %}
-        <a class="my-2 my-sm-0" href="{% url 'home:about' %}"> About Us </a>
-      {% endblock aboutus %}
+      
 
       {% block userinfo %}
       <ul class="navbar-nav ml-auto">

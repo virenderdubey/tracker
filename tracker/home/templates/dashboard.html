@@ -10,7 +10,7 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-6">
-                <div class="card">
+                <div class="card home-card">
                     <div class="card-header">
                         <h5 class="card-tracker"> Introduction </h5>
                     </div>
@@ -22,7 +22,7 @@
                 </div>
             </div>
             <div class="col-sm-6">
-                <div class="card">
+                <div class="card home-card">
                     <div class="card-header">
                         <h5 class="card-tracker"> Assigned To Me </h5>
                     </div>
@@ -36,7 +36,7 @@
                                     <tr>
                                         {% for k, v in obj.items %}
                                             {% if k == "key" %}
-                                                <td class="home-card-td"> <a href="{% url 'tasks:browse' task_key=v %}"></a> {{ v }} </td>
+                                                <td class="home-card-td"> <a href="{% url 'tasks:browse' task_key=v %}"> {{ v }} </a> </td>
                                             {% else %}
                                                 <td class="home-card-td"> {{ v }} </td>
                                             {% endif %}
@@ -49,7 +49,7 @@
                 </div>
             </div>
         </div>
-        <div class="card">
+        <div class="card home-card">
             <div class="card-header">
                 <h5 class="card-tracker"> Reported By Me </h5>
             </div>
@@ -64,7 +64,7 @@
                                 <tr>
                                     {% for k, v in obj.items %}
                                         {% if k == "key" %}
-                                            <td class="home-card-td"> <a href="{% url 'tasks:browse' task_key=v %}"></a> {{ v }} </td>
+                                            <td class="home-card-td"> <a href="{% url 'tasks:browse' task_key=v %}"> {{ v }} </a> </td>
                                         {% else %}
                                             <td class="home-card-td"> {{ v }} </td>
                                         {% endif %}
