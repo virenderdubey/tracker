@@ -9,14 +9,18 @@
 <div class="container">
     
     <div class="header">
-        <h3 class="title"> Add Tasks </h3>
+        <h3 class="title"> {{ action|title }} Task </h3>
     </div>
     <div class="change">
+        {% if parent %}
+        <form action="{% url 'tasks:create' %}?key={{parent}}" method="POST">
+        {% else %}
         <form action="{% url 'tasks:create' %}" method="POST">
+        {% endif %}
             {% csrf_token %}
             {{ form | crispy }}
             <div class="actions">
-                <button type="submit" class="btn btn-primary"> Add New </button>
+                <button type="submit" class="btn btn-primary"> {{action_button|title}} </button>
             </div>
         </form>
     </div>

@@ -25,8 +25,8 @@
                 </p>
             </div>
             <div class="task-options">
-                    <a class="btn btn-primary task-option" href="{% url 'tasks:create' %}"> Edit </a>
-                <a class="btn btn-primary task-option" href="{% url 'tasks:create' %}"> Create Sub-Task </a>
+                <a class="btn btn-primary task-option" href="{% url 'tasks:edit' obj.key %}"> Edit </a>
+                <a class="btn btn-primary task-option" href="{% url 'tasks:create' %}?key={{obj.key}}"> Create Sub-Task </a>
 
                 {% if workflow_options|length == 1 %}
                     {% for options in workflow_options %}
@@ -70,7 +70,16 @@
                 </div>
             </div>
             <div class="subtasks-list">
-                <h4> Subtasks </h4>
+                <h4> Dependent Tasks </h4>
+                <table class="table table-responsive">
+                    {% for row in subtasks %}
+                    <tr>
+                        <td> {{ row.type }} </td>
+                        <td> <a href="{% url 'tasks:browse' row.key %}"> {{ row.key }}  </a></td>
+                        <td> {{ row.summary }} </td>
+                    </tr>
+                    {% endfor %}
+                </table>
             </div>
             <div class="task-attachments">
                 <h4> Attachments </h4>

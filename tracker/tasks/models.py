@@ -75,11 +75,11 @@ class Task(models.Model):
         self.save()
         return key
 
-class TaskDependency(models.Model):
+class TaskDependencyMapping(models.Model):
     """ Creating Task Dependencies """
     dependency_type = models.CharField(max_length=100, unique=False)
-    task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name="parent_task")
-    dependent_task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name="dependent_task")
+    task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name="parent_task_object")
+    dependent_task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name="dependent_task_object")
 
 
 class Attachments(models.Model):
@@ -113,3 +113,13 @@ class Filters(models.Model):
     modified_at = models.DateTimeField(auto_now=True)
     created_by = models.ForeignKey(User, on_delete=models.PROTECT, related_name="filters_created_by")
     modified_by = models.ForeignKey(User, on_delete=models.PROTECT, related_name="filters_modified_by")
+
+class TaskDependency(object):
+    name = models.CharField(max_length=100, unique=True, null=False, blank=False)
+    inward = models.CharField(max_length=100, unique=True, null=False, blank=False)
+    outward = models.CharField(max_length=100, unique=True, null=False, blank=False)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    modified_at = models.DateTimeField(auto_now=True)
+    created_by = models.ForeignKey(User, on_delete=models.PROTECT, related_name="task_dependency_created_by")
+    modified_by = models.ForeignKey(User, on_delete=models.PROTECT, related_name="task_dependency_modified_by")

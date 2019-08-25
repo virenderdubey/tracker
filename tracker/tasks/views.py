@@ -35,9 +35,21 @@ class TaskView(View):
     fields = ['key', 'project__name', 'tasktype__name', 'summary', 'priority', 'state']
     form = TaskForm
 
-    def create(self, request, *args, **kwargs):
+    def create(self, request, task_key=None, *args, **kwargs):
+        parent = request.GET.get("key")
+        if task_key is None:
+            form = self.form()
+            action = action_button="Add New"
+        else:
+            task = Task.objects.get(key = task_key)
+            form = self.form(instance=task)
+            action = "Change"
+            action_button = "Update"
         context={
-            "form" : self.form()
+            "form" : form,
+            "action": action,
+            "action_button": action_button,
+            "parent": parent,
         }
         return render(request, self.template, context)
 
@@ -82,8 +94,8 @@ class TaskView(View):
 
     def get_tasks_by_tasktype(self, name):
         try:
-            tasktype = TaskType.objects.get(name=name)        #noqa : Django Queryset
-            queryset = Task.objects.filter(tasktype=tasktype)   #noqa : Django Queryset
+            tasktype = TaskType.objects.get(name=name)          # noqa : Django Queryset
+            queryset = Task.objects.filter(tasktype=tasktype)   # noqa : Django Queryset
             queryset = list(queryset.values(*self.fields))
         except Exception as e:
             logger.exception(e)
@@ -105,6 +117,9 @@ class TaskView(View):
             transitions = obj.tasktype.get_avilable_transitions(obj.state)
             comments = Comments.objects.filter(task=obj.id).values('comment', 'created_by__username')
             attachments = Attachments.objects.filter(task=obj.id).values('file_path')
+            childs = TaskDependency.objects.filter(task=obj, dependency_type="subtask")
+            childs = [ { "key": row.dependent_task.key, "summary": row.dependent_task.summary, "type": row.dependency_type } for row in subtasks ]
+
             new_comments_form = CommentsForm()
             upload_attachments_form = AttachmentsForm()
 
@@ -124,6 +139,7 @@ class TaskView(View):
             context["attachments"] = attachments
             context["new_comments_form"] = new_comments_form
             context["upload_attachments_form"] = upload_attachments_form
+            context["subtasks"] = subtasks
 
         except Exception as e:
             logger.exception(e)
@@ -187,27 +203,31 @@ class TaskView(View):
             context["error"] = str(e)
             return render(request, template, context)
 
-
     def get(self, request, action, task_key=None, *args, **kwargs):
         if action == "create":
-            return self.create(request, *args, **kwargs)
+            return self.create(request, task_key)
         elif action == "search":
             return self.search(request, *args, **kwargs)
-        elif action == 'browse':
+        elif action == 'browse':        
             return self.browse(request, task_key, *args, **kwargs)
+        elif action == 'edit':
+            return self.create(request, task_key)
         else:
             return HttpResponse("Unknown Action Receieved.")
 
-    def handle_uploaded_file(self, f):
-        with open('some/file/name.txt', 'wb+') as destination:
-            for chunk in f.chunks():
-                destination.write(chunk)
-
     def post(self, request, action, task_key=None, pk=None, *args, **kwargs):
-        if action == "create":
-            form = self.form(request.POST)
+        if action in [ "create", "edit" ]:
+            parent_key = request.GET.get("key")
+            parent=Task.objects.get(key=parent_key)
+            try:
+                instance = Task.objects.get(key=task_key)
+                form = self.form(request.POST, instance=instance)
+            except:
+                instance = None
+                form = self.form(request.POST)
+
             if form.is_valid():
-                key = self.form_valid(form, pk)
+                key = self.form_valid(form, instance, parent)
                 return redirect(reverse('tasks:browse', kwargs={"task_key": key}))
             else:
                 context = {
@@ -239,11 +259,13 @@ class TaskView(View):
                     obj.save()
             return redirect('tasks:browse', task_key=task_key)
 
-    def form_valid(self, form, pk):
+    def form_valid(self, form, pk, parent):
         user = self.request.user
         obj = form.save(commit=False)
         obj.modified_by = user
         if not pk:
             # New Object being Created.
             key = obj.create_task(user)
+        if parent:
+            TaskDependency.objects.create(dependency_type="subtask", task=parent, dependent_task=obj)
         return key
