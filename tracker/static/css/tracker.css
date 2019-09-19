@@ -5,6 +5,24 @@
     color: red;
 }
 
+.signin-btn {
+    color: white;
+}
+
+.signup-btn {
+    color: white;
+}
+.btn-default {
+    background-color: khaki;
+    border-color: khaki;
+    margin-right: 15px;
+    margin-bottom: 15px;
+}
+.tasks-search {
+    margin-right: 15px;
+    margin-left: 25px;
+    margin-bottom: 15px;
+}
 .navbar-nav {
     display: inline-flex;
 }

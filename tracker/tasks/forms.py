@@ -11,6 +11,7 @@ class TaskTypeForm(forms.ModelForm):
         exclude = ('created_on', 'modified_on', 'created_by', 'modified_by')
 
 class TaskForm(forms.ModelForm):
+    parent = forms.CharField(widget=forms.HiddenInput(attrs={"initial": None}), required=False)
     class Meta:
         model = Task
         exclude = ('created_on', 'modified_on', 'created_by', 'modified_by')

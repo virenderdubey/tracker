@@ -26,7 +26,12 @@
             </div>
             <div class="task-options">
                 <a class="btn btn-primary task-option" href="{% url 'tasks:edit' obj.key %}"> Edit </a>
-                <a class="btn btn-primary task-option" href="{% url 'tasks:create' %}?key={{obj.key}}"> Create Sub-Task </a>
+                <form  class="form-inline" action="{% url 'tasks:create' %}" method="post" style="display: inline-flex;">
+                        {% csrf_token %}
+                        <input type="text" value="true" name="parent" id="parent" hidden> </input>
+                        <input type="text" value="{{ obj.key }}" name="parent_task" id="parent_task" hidden> </input>
+                        <button class="btn btn-primary task-option" type="submit"> Create Sub Tasks </button>
+                </form>
 
                 {% if workflow_options|length == 1 %}
                     {% for options in workflow_options %}

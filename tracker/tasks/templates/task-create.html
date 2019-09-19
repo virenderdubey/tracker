@@ -12,11 +12,10 @@
         <h3 class="title"> {{ action|title }} Task </h3>
     </div>
     <div class="change">
-        {% if parent %}
-        <form action="{% url 'tasks:create' %}?key={{parent}}" method="POST">
-        {% else %}
-        <form action="{% url 'tasks:create' %}" method="POST">
+        {% if task_key %}
+        <form action="{% url 'tasks:edit' task_key %}" method="POST">
         {% endif %}
+        <form action="{% url 'tasks:create' %}" method="POST">
             {% csrf_token %}
             {{ form | crispy }}
             <div class="actions">

@@ -5,8 +5,10 @@ from django.views.generic import TemplateView, View
 from django.http.response import HttpResponse
 from home.base_views import BaseView
 from projects.models import Project
-from tasks.models import TaskType, Task, Filters, Comments, TaskDependency, Attachments
-from tasks.forms import TaskTypeForm, TaskForm, FiltersForm, CommentsForm, AttachmentsForm
+from tasks.models import TaskType, Task, Filters, Comments, TaskDependency, Attachments, TaskDependencyMapping
+from workflows.models import WorkflowStates
+from accounts.models import User
+from tasks.forms import TaskTypeForm, TaskForm, FiltersForm, CommentsForm, AttachmentsForm, TaskDependencyForm
 from projects.models import Project
 from django.db.models import Q
 from django.shortcuts import redirect, reverse
@@ -29,6 +31,12 @@ class FiltersView(BaseView):
     app = "admin_tasks"
     model_name = "Filters"
 
+class TaskDependencyView(BaseView):
+    form = TaskDependencyForm
+    model = TaskDependency
+    app = "admin_tasks"
+    model_name = "Task Dependency"
+
 
 class TaskView(View):
     template = "task-create.html"
@@ -36,20 +44,19 @@ class TaskView(View):
     form = TaskForm
 
     def create(self, request, task_key=None, *args, **kwargs):
-        parent = request.GET.get("key")
         if task_key is None:
             form = self.form()
             action = action_button="Add New"
         else:
-            task = Task.objects.get(key = task_key)
-            form = self.form(instance=task)
+            task = Task.objects.get(key=task_key)
+            form = self.form(instance=task, initial={'parent': task_key})
             action = "Change"
             action_button = "Update"
         context={
             "form" : form,
             "action": action,
-            "action_button": action_button,
-            "parent": parent,
+            "task_key": task_key,
+            "action_button": action_button
         }
         return render(request, self.template, context)
 
@@ -104,7 +111,7 @@ class TaskView(View):
             return queryset
 
     def get_tasks(self):
-        return list(Task.objects.all().values_list(*self.fields))
+        return list(Task.objects.all().values(*self.fields))
 
     def browse(self, request, task_key, *args, **kwargs):
         template="task-browse.html"
@@ -117,8 +124,14 @@ class TaskView(View):
             transitions = obj.tasktype.get_avilable_transitions(obj.state)
             comments = Comments.objects.filter(task=obj.id).values('comment', 'created_by__username')
             attachments = Attachments.objects.filter(task=obj.id).values('file_path')
-            childs = TaskDependency.objects.filter(task=obj, dependency_type="subtask")
-            childs = [ { "key": row.dependent_task.key, "summary": row.dependent_task.summary, "type": row.dependency_type } for row in subtasks ]
+            task_dependency=TaskDependency.objects.get(name='subtask')
+            outward_tasks = TaskDependencyMapping.objects.filter(task=obj, dependency_type=task_dependency)
+            outward_tasks = [ { "key": row.dependent_task.key, "summary": row.dependent_task.summary, "type": task_dependency.outward } for row in outward_tasks ]
+
+            inward_tasks = TaskDependencyMapping.objects.filter(dependent_task=obj, dependency_type=task_dependency)
+            inward_tasks = [ { "key": row.task.key, "summary": row.task.summary, "type": task_dependency.inward } for row in inward_tasks ]
+            
+            subtasks = outward_tasks + inward_tasks
 
             new_comments_form = CommentsForm()
             upload_attachments_form = AttachmentsForm()
@@ -163,7 +176,9 @@ class TaskView(View):
 
     def search(self, request, *args, **kwargs):
         context = {}
+        local_context = {}
         try:
+            logger.info("Searching Tasks")
             template="task-list.html"
             project_name = request.GET.get("project")
             task_filter = request.GET.get("filter")
@@ -189,13 +204,29 @@ class TaskView(View):
             elif text:
                 queryset = self.get_task_by_text(text=text)
             else:
+                logger.info("Fetching All Tasks.")
+                project_list = list(Project.objects.all().values_list('name', flat=True))
+                tasktype_list = list(TaskType.objects.all().values_list('name', flat=True))
+                state_list = list(WorkflowStates.objects.all().values_list('name', flat=True))
+                priority_list = [ row[0] for row in Task.TASK_PRIORITY]
+                user_list = list(User.objects.all().values_list('username', flat=True))
+                local_context = {
+                    "project_list": project_list,
+                    "tasktype_list": tasktype_list,
+                    "state_list": state_list,
+                    "priority_list": priority_list,
+                    "user_list": user_list,
+                }
                 queryset = self.get_tasks()
+                name = f"Tasks"
+
             context={
                 "name": name,
                 "queryset": queryset,
                 "keys": self.fields,
-                "link": "key"
+                "link": "key",
             }
+            context.update(local_context)
             return render(request, template, context)
         except Exception as e:
             logger.exception(e)
@@ -208,7 +239,7 @@ class TaskView(View):
             return self.create(request, task_key)
         elif action == "search":
             return self.search(request, *args, **kwargs)
-        elif action == 'browse':        
+        elif action == 'browse':
             return self.browse(request, task_key, *args, **kwargs)
         elif action == 'edit':
             return self.create(request, task_key)
@@ -216,19 +247,61 @@ class TaskView(View):
             return HttpResponse("Unknown Action Receieved.")
 
     def post(self, request, action, task_key=None, pk=None, *args, **kwargs):
-        if action in [ "create", "edit" ]:
-            parent_key = request.GET.get("key")
-            parent=Task.objects.get(key=parent_key)
+        if action == "edit":
             try:
                 instance = Task.objects.get(key=task_key)
                 form = self.form(request.POST, instance=instance)
-            except:
+            except Exception as e:
+                logger.exception(e)
                 instance = None
                 form = self.form(request.POST)
 
             if form.is_valid():
-                key = self.form_valid(form, instance, parent)
+                key = self.form_valid(form, instance)
                 return redirect(reverse('tasks:browse', kwargs={"task_key": key}))
+            else:
+                context = {
+                    "form": form,
+                    "action" : "Change",
+                    "action_button" : "Update",
+                    "task_key": task_key
+                }
+                return render(request, self.template, context)
+        elif action == "create":
+            parent = request.POST.get("parent")
+            parent_task = request.POST.get("parent_task")
+            if parent == 'true' and parent_task is not None:
+                try:
+                    t=Task.objects.get(key=parent_task)
+                    form = self.form(initial={'parent': parent_task, 'project': t.project})
+                except Exception as e:
+                    logger.exception(e)
+                    form = self.form()
+                context = {
+                    "form": form,
+                    "action": "Add New ",
+                    "action_button": "Add SubTasks"
+                }
+                return render(request, self.template, context)
+
+            form = self.form(request.POST)
+            parent = form['parent'].value()
+
+            if form.is_valid():
+                t=None
+                if parent:
+                    try:
+                        t=Task.objects.get(key=parent)
+                    except:
+                        message = "Unable to find parent - %s" %(parent)
+                        logger.exception(message)
+                        form.add_error(None, message)
+                        context = {
+                            "form": form,
+                        }
+                        return render(request, self.template, context)
+                key = self.form_valid(form, pk, parent=t)
+                return redirect( reverse('tasks:browse', kwargs={"task_key": key}))
             else:
                 context = {
                     "form": form,
@@ -238,7 +311,7 @@ class TaskView(View):
             task_obj = Task.objects.get(key=task_key)
             user = self.request.user
             comment = request.POST.get("comment")
-            
+
             # Uploading Attachments
             if request.FILES:
                 form = AttachmentsForm(request.POST, request.FILES)
@@ -259,13 +332,17 @@ class TaskView(View):
                     obj.save()
             return redirect('tasks:browse', task_key=task_key)
 
-    def form_valid(self, form, pk, parent):
+    def form_valid(self, form, instance, parent=None):
         user = self.request.user
         obj = form.save(commit=False)
         obj.modified_by = user
-        if not pk:
+        if not instance:
             # New Object being Created.
             key = obj.create_task(user)
+        else:
+            key = instance.key
+            obj.save()
         if parent:
-            TaskDependency.objects.create(dependency_type="subtask", task=parent, dependent_task=obj)
+            task_dependency=TaskDependency.objects.get(name='subtask')
+            TaskDependencyMapping.objects.create(dependency_type=task_dependency, task=parent, dependent_task=obj)
         return key

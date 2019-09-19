@@ -105,10 +105,10 @@ class BaseView(View):
 
     def save_form(self, form, pk):
         user = self.request.user
-        form._save_m2m()
         obj = form.save(commit=False)
         obj.modified_by = user
         if not pk:
             # new object created
             obj.created_by = user
         obj.save()
+        form.save_m2m()

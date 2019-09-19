@@ -55,7 +55,6 @@ class HomeView(View):
             context["assigned_filters"] = self._get_user_assigned_tasks(request.user)
             context["reported_filters"] = self._get_user_reported_tasks(request.user)
             context["task_fields"] = self.task_ui_fields
-            print(context)
 
             # Fetch all filters created by user and system and add in session.
             template = self.login_template_name
