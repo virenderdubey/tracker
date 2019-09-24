@@ -46,7 +46,7 @@ class HomeView(View):
         if request.user.is_authenticated:
             username = request.user.username
             projects = self._get_all_projects()
-            system_filters = self._get_system_filters(username="tracker")
+            system_filters = self._get_system_filters(username="admin")
             user_filters = self._get_user_filters(request.user)
             request.session[username] = {
                 "projects" : projects,

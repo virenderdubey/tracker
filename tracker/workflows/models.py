@@ -24,7 +24,7 @@ class WorkflowStates(models.Model):
 
 class WorkflowTransitions(models.Model):
     """ Model to create Workflow Transition """
-    name = models.CharField(max_length=100, unique=True)
+    name = models.CharField(max_length=100, unique=False, null=False, blank=False)
     description = models.CharField(max_length=500, null=True)
     from_state = models.ForeignKey(WorkflowStates, on_delete=models.PROTECT, related_name="workflow_transition_from")
     to_state = models.ForeignKey(WorkflowStates, on_delete=models.PROTECT, related_name="workflow_transition_to")

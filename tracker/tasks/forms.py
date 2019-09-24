@@ -3,7 +3,7 @@ from django import forms
 from tasks.models import TaskType, Task, Filters, Attachments, Comments, TaskDependency
 
 class TaskTypeForm(forms.ModelForm):
-    ui_fields = ['id', 'name']
+    ui_fields = ['id', 'name', 'workflow__name']
     link = "name"
 
     class Meta:
@@ -17,7 +17,7 @@ class TaskForm(forms.ModelForm):
         exclude = ('created_on', 'modified_on', 'created_by', 'modified_by')
 
 class TaskDependencyForm(forms.ModelForm):
-    ui_fields = ['name', 'inward', 'outward']
+    ui_fields = ['id', 'name', 'inward', 'outward']
     link = 'name'
 
     class Meta:
@@ -25,7 +25,7 @@ class TaskDependencyForm(forms.ModelForm):
         exclude = ('created_on', 'modified_on', 'created_by', 'modified_by')
 
 class FiltersForm(forms.ModelForm):
-    ui_fields = ['id', 'name']
+    ui_fields = ['id', 'name', 'fields', 'ordering']
     link = "name"
     
     class Meta:

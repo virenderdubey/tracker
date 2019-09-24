@@ -8,6 +8,7 @@ logger = logging.getLogger(__name__)
 
 
 class Project(models.Model):
+    """ This is the Project Model """
     name = models.CharField(max_length=100, unique=True, null=False, blank=False)
     description = models.CharField(max_length=500, null=True)
     owner = models.ForeignKey(User, on_delete=models.PROTECT, limit_choices_to={"is_active": True})

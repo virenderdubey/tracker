@@ -43,7 +43,7 @@ class Task(models.Model):
 
     key = models.CharField(max_length=20, unique=True, blank=False, null=False, editable=False)
     watchers = models.CharField(max_length=500, unique=False, blank=True, null=True, editable=False)
-    state =models.CharField(max_length=100, unique=False, blank=False, null=False, editable=False)
+    state = models.CharField(max_length=100, unique=False, blank=False, null=False, editable=False)
 
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)

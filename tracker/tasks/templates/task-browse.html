@@ -59,7 +59,7 @@
                         <label class="field-label" for="priority"> State: </label> {{ obj.state }}
                     </div>
                     <div class="task-fields">
-                        <label class="field-label" for="priority"> DueDate: </label> {{ obj.duedate }}
+                        <label class="field-label" for="priority"> DueDate: </label> {{ obj.due_date }}
                     </div>
                     <div class="task-fields">
                         <label class="field-label" for="priority"> Description: </label> {{ obj.description }}
@@ -71,6 +71,9 @@
                     </div>
                     <div class="task-fields">
                         <label class="field-label" for="priority"> Reporter: </label> {{ obj.reporter }}
+                    </div>
+                    <div class="task-fields">
+                        <label class="field-label" for="priority"> Watchers: </label> {{ obj.watchers }}
                     </div>
                 </div>
             </div>

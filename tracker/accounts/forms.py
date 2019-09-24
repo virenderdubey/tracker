@@ -16,7 +16,7 @@ class CustomUserChangeForm(UserChangeForm):
         fields = ('first_name', 'last_name', 'email', 'username', 'avatar', 'aboutme', 'mobile')
 
 class UserForm(forms.ModelForm):
-    ui_fields = ['id', 'username', 'email']
+    ui_fields = ['id', 'username', 'email', 'is_superuser']
     link = "username"
 
     class Meta:

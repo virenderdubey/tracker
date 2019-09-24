@@ -19,8 +19,8 @@ class User(AbstractUser):
     first_name = models.CharField(max_length=50, null=False, blank=False)
     last_name = models.CharField(max_length=50, null=False, blank=False)
     avatar = models.ImageField(blank=True, null=True)
-    aboutme = models.TextField()
-    mobile = models.CharField(max_length=12)
+    aboutme = models.TextField(null=True, blank=True)
+    mobile = models.CharField(max_length=20,null=True, blank=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
