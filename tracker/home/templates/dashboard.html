@@ -1,0 +1,81 @@
+<!-- templates/home.html-->
+{% extends 'headers.html' %}
+{% load static %}
+{% load extras %}
+
+
+{% block title %} Home {% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="card home-card">
+                    <div class="card-header">
+                        <h5 class="card-tracker"> Introduction </h5>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Welcome to Tracker Pvt. Ltd. </h5>
+                        <p class="card-text"> Not sure where to start? Check out the Tracker Guide ---->
+                        <a href="#" class="btn btn-link">Here </a>  </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="card home-card">
+                    <div class="card-header">
+                        <h5 class="card-tracker"> Assigned To Me </h5>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-sm table-striped table-hover" id="list-data">
+                            <thead class="thead-dark">
+                                {% for key in task_fields %} <th class="thead-tracker"> {{ key|upper }} </th> {% endfor %}
+                            </thead>
+                            <tbody>
+                                {% for obj in assigned_filters %}
+                                    <tr>
+                                        {% for k, v in obj.items %}
+                                            {% if k == "key" %}
+                                                <td class="home-card-td"> <a href="{% url 'tasks:browse' task_key=v %}"> {{ v }} </a> </td>
+                                            {% else %}
+                                                <td class="home-card-td"> {{ v }} </td>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card home-card">
+            <div class="card-header">
+                <h5 class="card-tracker"> Reported By Me </h5>
+            </div>
+            <div class="card-body">
+                <div class="list table-responsive">
+                    <table class="table table-sm table-striped table-hover" id="list-data">
+                        <thead>
+                            {% for key in task_fields %} <th id="tracker-head" class="thead-tracker"> {{ key|upper }} </th> {% endfor %}
+                        </thead>
+                        <tbody>
+                            {% for obj in reported_filters %}
+                                <tr>
+                                    {% for k, v in obj.items %}
+                                        {% if k == "key" %}
+                                            <td class="home-card-td"> <a href="{% url 'tasks:browse' task_key=v %}"> {{ v }} </a> </td>
+                                        {% else %}
+                                            <td class="home-card-td"> {{ v }} </td>
+                                        {% endif %}
+                                    {% endfor %}
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+

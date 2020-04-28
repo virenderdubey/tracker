@@ -1,0 +1,63 @@
+<!-- templates/home.html-->
+{% extends 'headers.html' %}
+{% load static %}
+
+{% block title %} Home {% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+  <div class="row">
+    <!-- Adding Left Pane -->
+    <nav class="col-sm-2 bg-light sidebar ">
+    {% block left_pane %}
+      <ul class="nav flex-column">
+        <li class="nav-item left-pane-headings">
+          <a href="{% url 'projects:project-list' %}"> 
+            <h5 class="text-muted"> Administration </h5> 
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="{% url 'accounts:user-list' %}"> Users </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="{% url 'accounts:team-list' %}"> Teams </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="{% url 'projects:project-list' %}"> Projects </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="{% url 'admin_tasks:tasktype-list' %}"> Tasks Type </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="{% url 'projects:permissions-list' %}"> Permissions </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="{% url 'projects:roles-list' %}"> Roles </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="{% url 'workflows:workflow-list' %}"> Workflows </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="{% url 'workflows:workflowstates-list' %}"> Workflows States </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="{% url 'workflows:workflowtransitions-list' %}"> Workflows Transitions </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="{% url 'admin_tasks:filters-list' %}"> Filters </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="{% url 'admin_tasks:taskdependency-list' %}"> TaskDependency </a>
+        </li>
+      </ul>
+    {% endblock left_pane %}
+    </nav>
+
+    <!-- Adding Right Pane -->
+    <main role="main" class="col-sm-9">
+      {% block right_pane %}
+      {% endblock %}
+    </main>
+  </div>
+</div>
+{% endblock content %}

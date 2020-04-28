@@ -1,0 +1,155 @@
+<!-- templates/home.html-->
+{% extends 'headers.html' %}
+{% load static %}
+
+{% block title %} Home {% endblock %}
+
+{% block customjs %}
+  <script type="text/javascript">
+    $(function(){
+    $('#loginModal').modal({
+      show: true,
+      focus: true
+    });
+    $('#loginModal').on('hide.bs.modal', function(e){
+        $('#login_error').val("");
+    });
+    });
+  </script>
+{% endblock %}
+
+{% block content %}
+<!-- Login Modal -->
+<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="loginModalLabel">Login</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+        <form action="{% url 'accounts:login' %}" method="post">
+          {% csrf_token %}
+        <div class="modal-body">
+        <div class="error">
+          <p id="login_error"> {{ error }}</p>
+        </div>
+          <div class="login">
+            <div class="form-group row">
+              <label for="id_username" class="col-sm-3 col-form-label">Username: </label>
+              <input type="text" class="form-control col-sm-8" name="username" id="id_username" maxlength="50" autofocus required>
+            </div>
+            <div class="form-group row">
+                <label for="id_password" class="col-sm-3 col-form-label">Password: </label>
+                <input type="password" name="password" id="id_password" class="form-control col-sm-8">
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-primary">Login</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="container">
+  <div class="media top-image">
+    <img src="{% static 'images/people.png' %}" class="mr-3" alt="" sizes="" srcset="">
+    <div class="media-body" style="margin-left: 20px;">
+      <h1 class="mt-6" style="margin-top:25px;"> Less Chaos </h1>
+      <h1 class="mt-6" style="margin-left:100px;"> More Outcomes </h1>
+      <h3 class="mt-2"> Project Management helps teams manage </h3>
+      <ul>
+        <li> Software Releases </li>
+        <li> Marketing Goals </li>
+        <li> Timely Deliveries </li>
+        <li> Tasks Management </li>
+        <li> Nice Reporting </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="middle">
+    <h2 class="text"> Designed with thoughtful approach for more productivity. </h2>
+    <div class="media middle-text">
+      <img class="mr-3" src="{% static 'images/powerfull.png' %}" alt="Generic placeholder image">
+      <div class="media-body">
+        <h5 class="mt-0">Unlimited Projects, Tasks & Users</h5>
+        <p>Bring all the projects & teams together on an all in one collaborative work management software.</p>
+      </div>
+    </div>
+    <div class="media middle-text">
+      <img class="mr-3" src="{% static 'images/powerfull.png' %}" alt="Generic placeholder image">
+      <div class="media-body">
+        <h5 class="mt-0"> Simplified Project Management </h5>
+        <p> Add value to your business with successful project delivery. Build realistic project plans and monitor execution seamlessly. </p>
+      </div>
+    </div>
+    <div class="media middle-text">
+      <img class="mr-3" src="{% static 'images/powerfull.png' %}" alt="Generic placeholder image">
+      <div class="media-body">
+        <h5 class="mt-0">Improve Project Delivery</h5>
+        <p>Accelerate project delivery with real time collaboration among the team to ensure projects are delivered on time & with in budget while maintaining optimum quality.</p>
+      </div>
+    </div>
+    <div class="media middle-text">
+      <img class="mr-3" src="{% static 'images/powerfull.png' %}" alt="Generic placeholder image">
+      <div class="media-body">
+        <h5 class="mt-0"> Robust Resource and Task Planning. </h5>
+        <p>Roles and availability based task planning for optimum resource utilization. Manage holidays and leaves in real time to prevent delays.</p>
+      </div>
+    </div>
+    <div class="media middle-text">
+      <img class="mr-3" src="{% static 'images/powerfull.png' %}" alt="Generic placeholder image">
+      <div class="media-body">
+        <h5 class="mt-0"> Subtasks Creation </h5>
+        <p> Breakdown & organize your project tasks for added clarity and managing task wise dependencies effectively.</p>
+      </div>
+    </div>
+    <div class="media middle-text">
+      <img class="mr-3" src="{% static 'images/powerfull.png' %}" alt="Generic placeholder image">
+      <div class="media-body">
+        <h5 class="mt-0"> Workflow Management </h5>
+        <p> Give your projects a logical and unique workflow for meaningful execution.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="media centre-image">
+    <img src="{% static 'images/ideas.png' %}" class="mr-3" alt="" sizes="" srcset="">
+  </div>
+
+  <div class="card-deck bottom">
+      <div class="card border-0 card-center">
+        <img class="card-image-top card-image-width" src="{% static 'images/powerfull.png' %}" alt="Generic placeholder image">
+        <div class="card-body">
+          <h5 class="card-title">Powerfull</h5>
+          <p class="card-text">Customize everything easily.You are in full control</p>
+        </div>
+      </div>
+      <div class="card border-0 card-center">
+          <img class="card-image-top card-image-width" src="{% static 'images/simple.png' %}" alt="Generic placeholder image">
+          <div class="card-body">
+            <h5 class="card-title">Simple & Intuitive</h5>
+            <p class="card-text">Figuring out the tool is ridiculously easy.</p>
+          </div>
+      </div>
+      <div class="card border-0 card-center">
+          <img class="card-image-top card-image-width" src="{% static 'images/designed.png' %}" alt="Generic placeholder image">
+          <div class="card-body">
+            <h5 class="card-title">Highly Designed</h5>
+            <p class="card-text">Simple & Gorgeous! Beautiful to look at all day long</p>
+          </div>
+      </div>
+      <div class="card border-0 card-center">
+          <img class="card-image-top card-image-width" src="{% static 'images/customizable.png' %}" alt="Generic placeholder image">
+          <div class="card-body">
+            <h5 class="card-title">customizable</h5>
+            <p class="card-text">Give each project its own personality </p>
+          </div>
+      </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,224 @@
+/*
+    Primary File for Tracker CSS
+*/
+.error {
+    color: red;
+}
+
+.signin-btn {
+    color: white;
+}
+
+.signup-btn {
+    color: white;
+}
+.btn-default {
+    background-color: khaki;
+    border-color: khaki;
+    margin-right: 15px;
+    margin-bottom: 15px;
+}
+.tasks-search {
+    margin-right: 15px;
+    margin-left: 25px;
+    margin-bottom: 15px;
+}
+.navbar-nav {
+    display: inline-flex;
+}
+
+.nav-link {
+    padding-top: 0.2rem;
+    padding-bottom: 0.4rem;
+}
+
+.navbar-nav .nav-link {
+    padding-right: 10px;
+    padding-left: 10px;
+}
+
+.dropdown-menu {
+    min-width: 0.8rem;
+}
+
+.dropdown-item {
+    padding: 0.15rem 1rem;
+}
+
+.navbar-dark .navbar-nav .nav-link {
+    color: white;
+}
+.top-image {
+    margin-top: 3px;
+}
+
+.center-image {
+    margin: 30 0 0 30; 
+}
+
+.middle {
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
+
+/* .h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {
+    margin-bottom: 0.2rem;
+    line-height: 0.8;
+} */
+
+/* .h5, h5 {
+    font-size: 1.1rem;
+} */
+.card-tracker {
+    margin-bottom: 0.2rem;
+    line-height: 0.8;
+    font-size: 1.1rem;
+}
+
+.home-card {
+    margin-top: 2.5rem;
+    border: 1px solid rgba(0,0,10,.125)
+}
+
+.card-body {
+    padding: 0.75rem;
+}
+.card-header {
+    padding: .5rem 1rem;
+    margin-bottom: 2px;
+    border-bottom: 1px solid rgba(0,0,0,.125);
+    background-color:coral;
+    color: white;
+    font-weight: 2500;
+}
+
+.card-center {
+    text-align: center;
+    align-items: center;
+}
+
+.card-image-width {
+    width: 70px;
+}
+.text {
+    text-align: center;
+}
+
+.middle-text {
+    margin-top: 40px;
+    width: 500px;
+    display: inline-flex;
+}
+
+.bottom {
+    margin-top: 40px;
+    margin-bottom: 40px;
+    align-items: center
+}
+
+.signup {
+    width:60%;
+}
+h2.signup {
+    margin-top: 50px;
+    margin-bottom: 40px;
+}
+.signup-submit {
+    margin-bottom: 20px;
+    margin-left: 45%;
+}
+
+.left-pane-headings {
+    margin-top: 30px;
+    margin-bottom: 30px;
+    margin-left: 15px;
+}
+
+h5.left-pane-headings {
+    text-align: center;
+}
+
+.title {
+    display: inline;
+}
+
+.header {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+.add-new {
+    float: right;
+}
+
+.right-pane {
+    margin-left: 20px;
+}
+
+.task-view {
+    margin: 30px;
+}
+
+.summary {
+    font-size: 1.6rem;
+}
+
+.field-label {
+    width: 150px;
+}
+
+.thead-tracker {
+    color: white !important;
+    background-color: lightcoral !important;   
+    border-color: red !important;
+    font-size: 0.9rem;
+}
+.home-card-td {
+    font-size: 0.8rem;
+}
+
+.task-attachments {
+    margin: 25px 0px;
+}
+.task-comments {
+    margin: 25px 0px;
+}
+.task-options {
+    margin-bottom: 20px;
+    border: 1px dotted blue;
+    padding: 0.5px 0px;
+}
+.task-option {
+    border-radius: 1.0rem;
+    padding: .25rem .75rem;
+}
+
+.comment-submit {
+    margin: 10px 0px;
+}
+
+.subtasks-list {
+    margin: 15px 0px;
+}
+
+.attachments {
+    display: inline;
+}
+.attachments-submit {
+    margin: 10px 0px;
+}
+.comment-header  {
+    border-bottom: 1px solid rgba(0,0,0,.125);
+    background-color: blanchedalmond;
+    margin-bottom: 0.2rem;
+    line-height: 0.8;
+    font-size: 1.1rem;
+}
+.comment-owner {
+    margin: 0.2rem 0.0rem 0.3rem 0.5rem;
+}
+.comment-body {
+    background-color: floralwhite;
+}
+.comments-card {
+    margin-bottom: 10px;
+}

@@ -1,0 +1,26 @@
+{% extends 'admin.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block right_pane %}
+    <div class="right-pane header">
+        <h3 class="title"> {{ action | title }} {{ model | title }} </h3>
+    </div>
+    <div class="right-pane change">
+        {% if form.instance.pk %}
+            <form action="{% url namespace|add:':'|add:model|cut:' '|lower|add:'-detail' pk=form.instance.pk %}" method="POST">
+        {% else %}
+            <form action="{% url namespace|add:':'|add:model|cut:' '|lower|add:'-detail' %}" method="POST">
+        {% endif %}
+            {% csrf_token %}
+            {{ form | crispy }}
+            <div class="actions">
+                <button type="submit" class="btn btn-primary"> {% if form.instance.pk %} Update {% else %} Add New {% endif %}</button>
+                {% if form.instance.pk %}
+                    <a class="ml-auto btn delete-link btn-danger" href="{% url namespace|add:':'|add:model|cut:' '|lower|add:'-delete' pk=form.instance.pk %}" class="deletelink"> Delete </a>
+                {% endif %}
+            </div>
+        </form>
+    </div>
+    
+{% endblock %}

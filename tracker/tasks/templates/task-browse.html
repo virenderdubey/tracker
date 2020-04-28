@@ -1,0 +1,127 @@
+{% extends 'headers.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %} Tasks {% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    {% if error %}
+        <div class="error">
+            <h3 class="error"> {{ error }} </h3>
+        </div>
+    {% else %}
+        <div class="task-view">
+            <div class="task-header">
+                <h5 class="breadcumb">
+                    <a href="{% url 'tasks:search' %}?project={{obj.project.name}}"> {{ obj.project.name | title }} </a>
+                    /
+                    <a href="{% url 'tasks:search' %}?project={{obj.project.name}}&tasktype={{obj.tasktype.name}}"> {{ obj.tasktype.name | title }} </a>
+                    /
+                    <a href="{% url 'tasks:browse' task_key=obj.key %}"> {{ obj.key }} </a>
+                </h5>
+                <p class="task-fields summary">
+                    {{ obj.summary }}
+                </p>
+            </div>
+            <div class="task-options">
+                <a class="btn btn-primary task-option" href="{% url 'tasks:edit' obj.key %}"> Edit </a>
+                <form  class="form-inline" action="{% url 'tasks:create' %}" method="post" style="display: inline-flex;">
+                        {% csrf_token %}
+                        <input type="text" value="true" name="parent" id="parent" hidden> </input>
+                        <input type="text" value="{{ obj.key }}" name="parent_task" id="parent_task" hidden> </input>
+                        <button class="btn btn-primary task-option" type="submit"> Create Sub Tasks </button>
+                </form>
+
+                {% if workflow_options|length == 1 %}
+                    {% for options in workflow_options %}
+                        <a class="btn dropdown-item" href="{% url 'tasks:search' %}?project={{ options.name }}"> {{ options.name }}</a>
+                    {% endfor %}
+                {% else %}
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item dropdown">
+                            <a class="btn btn-primary task-option nav-link dropdown-toggle" href="" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Workflow</a>
+                            <div class="dropdown-menu" aria-labelledby="dropdown01">
+                                {% for options in workflow_options %}
+                                    <a class="dropdown-item" href="{% url 'tasks:browse' obj.key %}"> {{ options.name }} </a>
+                                {% endfor %}
+                            </div>
+                        </li>
+                    </ul>
+                {% endif %}                
+            </div>
+            <div class="task-body row">
+                <div class="col-sm-8">
+                    <div class="task-fields">
+                        <label class="field-label" for="priority"> Priority: </label> {{ obj.priority }}
+                    </div>
+                    <div class="task-fields">
+                        <label class="field-label" for="priority"> State: </label> {{ obj.state }}
+                    </div>
+                    <div class="task-fields">
+                        <label class="field-label" for="priority"> DueDate: </label> {{ obj.due_date }}
+                    </div>
+                    <div class="task-fields">
+                        <label class="field-label" for="priority"> Description: </label> {{ obj.description }}
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="task-fields">
+                        <label class="field-label" for="priority"> Assignee: </label> {{ obj.assignee }}
+                    </div>
+                    <div class="task-fields">
+                        <label class="field-label" for="priority"> Reporter: </label> {{ obj.reporter }}
+                    </div>
+                    <div class="task-fields">
+                        <label class="field-label" for="priority"> Watchers: </label> {{ obj.watchers }}
+                    </div>
+                </div>
+            </div>
+            <div class="subtasks-list">
+                <h4> Dependent Tasks </h4>
+                <table class="table table-responsive">
+                    {% for row in subtasks %}
+                    <tr>
+                        <td> {{ row.type }} </td>
+                        <td> <a href="{% url 'tasks:browse' row.key %}"> {{ row.key }}  </a></td>
+                        <td> {{ row.summary }} </td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+            <div class="task-attachments">
+                <h4> Attachments </h4>
+                {% for row in attachments %}
+                    <div class="attachments">
+                        {{ row.file_path }}
+                    </div>
+                {% endfor %}
+                <form method="post" action="{% url 'tasks:browse' obj.key %}" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ upload_attachments_form | crispy }}
+                    <input class="btn btn-primary attachments-submit" type="submit" value="Attach">
+                </form>
+            </div>
+            <div class="task-comments">
+                <h4> Comments </h4>
+                {% for row in comments %}
+                    <div class="card comments-card">
+                        <div class="card-title comment-header">
+                            <h6 class="comment-owner"> Added By {{ row.created_by__username }} </h6>
+                            
+                        </div>
+                        <div class="card-body comment-body">
+                            {{ row.comment }}
+                        </div>
+                    </div>
+                {% endfor %}
+                <form action="{% url 'tasks:browse' obj.key %}" method="post">
+                    {% csrf_token %}
+                    {{ new_comments_form | crispy }}
+                    <input class="btn btn-primary comment-submit" type="submit" value="Add Comments">
+                </form>
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock content %}
